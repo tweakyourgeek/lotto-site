@@ -32,12 +32,12 @@ export default function JackpotInput({
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
+    <div>
       <div className="text-center mb-8">
-        <h1 className="text-4xl md:text-6xl font-bold text-primary-purple mb-4">
+        <h1 className="text-3xl md:text-5xl font-bold text-primary-purple mb-4">
           The Lottery Reality Check
         </h1>
-        <p className="text-xl md:text-2xl text-navy">
+        <p className="text-lg md:text-xl text-navy">
           What would YOU do with a billion dollars?
         </p>
       </div>
@@ -118,18 +118,6 @@ export default function JackpotInput({
           </div>
         </div>
 
-        <div className="mt-6 text-xs text-navy/60 text-center">
-          Data based on{' '}
-          <a
-            href="https://www.usamega.com/powerball/jackpot"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-primary-purple"
-          >
-            usamega.com
-          </a>{' '}
-          (established 1999)
-        </div>
       </div>
     </div>
   )

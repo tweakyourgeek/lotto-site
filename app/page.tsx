@@ -9,12 +9,25 @@ import SummaryDashboard from '@/components/charts/SummaryDashboard'
 import DreamLifeCost from '@/components/calculator/DreamLifeCost'
 import EmailGate from '@/components/calculator/EmailGate'
 import RealityCheck from '@/components/calculator/RealityCheck'
+import ProgressIndicator from '@/components/wizard/ProgressIndicator'
+import WizardNavigation from '@/components/wizard/WizardNavigation'
 import { calculateNetTakeHome, calculateProjections } from '@/lib/calculations'
 import { DEFAULT_DEBTS, DEFAULT_LIFESTYLE } from '@/lib/constants'
+import { saveWizardData, loadWizardData } from '@/lib/storage'
 import type { Debt } from '@/components/calculator/DebtSection'
 import type { LifestyleItem } from '@/components/calculator/LifestyleSection'
 
+const STEPS = [
+  { number: 1, title: 'The Setup' },
+  { number: 2, title: 'Clear the Deck' },
+  { number: 3, title: 'Fun + Dreams' },
+  { number: 4, title: 'The Future' },
+  { number: 5, title: 'Your Results' },
+]
+
 export default function Home() {
+  const [currentStep, setCurrentStep] = useState(1)
+  const [visitedSteps, setVisitedSteps] = useState<number[]>([1])
   const [jackpot, setJackpot] = useState(1000000000)
   const [state, setState] = useState('Washington')
   const [payoutType, setPayoutType] = useState<'lump-sum' | 'annuity'>('lump-sum')
@@ -24,9 +37,25 @@ export default function Home() {
   const [investmentAmount, setInvestmentAmount] = useState(0)
   const [annualReturn, setAnnualReturn] = useState(7)
   const [showEmailGate, setShowEmailGate] = useState(false)
-  const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
 
-  const dreamLifeRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Load saved data on mount
+  useEffect(() => {
+    const saved = loadWizardData()
+    if (saved.currentStep) setCurrentStep(saved.currentStep)
+    if (saved.visitedSteps) setVisitedSteps(saved.visitedSteps)
+    if (saved.jackpot) setJackpot(saved.jackpot)
+    if (saved.state) setState(saved.state)
+    if (saved.payoutType) setPayoutType(saved.payoutType)
+    if (saved.filingStatus) setFilingStatus(saved.filingStatus)
+    if (saved.debts) setDebts(saved.debts)
+    if (saved.lifestyleItems) setLifestyleItems(saved.lifestyleItems)
+    if (saved.investmentAmount) setInvestmentAmount(saved.investmentAmount)
+    if (saved.annualReturn) setAnnualReturn(saved.annualReturn)
+    setIsLoaded(true)
+  }, [])
 
   const taxCalc = calculateNetTakeHome(jackpot, state, payoutType)
   const debtsCleared = debts.filter((d) => d.enabled).reduce((sum, d) => sum + d.amount, 0)
@@ -34,37 +63,41 @@ export default function Home() {
 
   // Auto-set investment to 50% of net take-home
   useEffect(() => {
-    const defaultInvestment = Math.floor(taxCalc.netTakeHome * 0.5)
-    setInvestmentAmount(defaultInvestment)
-  }, [taxCalc.netTakeHome])
+    if (isLoaded && investmentAmount === 0) {
+      const defaultInvestment = Math.floor(taxCalc.netTakeHome * 0.5)
+      setInvestmentAmount(defaultInvestment)
+    }
+  }, [taxCalc.netTakeHome, isLoaded, investmentAmount])
 
   const projections = calculateProjections(investmentAmount, annualReturn)
 
-  // Track scroll to show email gate after viewing all content
+  // Save data on changes
   useEffect(() => {
-    const handleScroll = () => {
-      if (dreamLifeRef.current && !hasScrolledToEnd) {
-        const rect = dreamLifeRef.current.getBoundingClientRect()
-        if (rect.top < window.innerHeight && rect.bottom >= 0) {
-          setHasScrolledToEnd(true)
-          // Show email gate after 2 seconds of viewing the dream life section
-          setTimeout(() => setShowEmailGate(true), 2000)
-        }
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [hasScrolledToEnd])
+    if (!isLoaded) return
+    saveWizardData({
+      currentStep,
+      visitedSteps,
+      jackpot,
+      state,
+      payoutType,
+      filingStatus,
+      debts,
+      lifestyleItems,
+      investmentAmount,
+      annualReturn,
+    })
+  }, [currentStep, visitedSteps, jackpot, state, payoutType, filingStatus, debts, lifestyleItems, investmentAmount, annualReturn, isLoaded])
 
   // Track analytics
   useEffect(() => {
+    if (!isLoaded) return
+
     const timer = setTimeout(() => {
       trackAnalytics()
-    }, 1000) // Debounce analytics tracking
+    }, 1000)
 
     return () => clearTimeout(timer)
-  }, [jackpot, state, debts, lifestyleItems, investmentAmount])
+  }, [jackpot, state, debts, lifestyleItems, investmentAmount, isLoaded])
 
   const trackAnalytics = async () => {
     try {
@@ -83,7 +116,6 @@ export default function Home() {
         }),
       })
     } catch (error) {
-      // Silent fail - don't interrupt user experience
       console.error('Analytics tracking failed:', error)
     }
   }
@@ -113,7 +145,6 @@ export default function Home() {
 
       if (!response.ok) throw new Error('Failed to send email')
 
-      // Generate and download PDF
       const pdfResponse = await fetch('/api/pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -149,48 +180,172 @@ export default function Home() {
     }
   }
 
+  const goToStep = (step: number) => {
+    setCurrentStep(step)
+    if (!visitedSteps.includes(step)) {
+      setVisitedSteps([...visitedSteps, step])
+    }
+    // Scroll to top
+    containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const handleNext = () => {
+    if (currentStep < 5) {
+      goToStep(currentStep + 1)
+    } else {
+      // On final step, show email gate
+      setShowEmailGate(true)
+    }
+  }
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      goToStep(currentStep - 1)
+    }
+  }
+
+  const stepsWithVisited = STEPS.map((step) => ({
+    ...step,
+    visited: visitedSteps.includes(step.number),
+  }))
+
   return (
-    <main className="min-h-screen py-8 md:py-12">
-      <div className="container mx-auto px-4 max-w-6xl space-y-8">
-        <JackpotInput
-          jackpot={jackpot}
-          onJackpotChange={setJackpot}
-          state={state}
-          onStateChange={setState}
-          payoutType={payoutType}
-          onPayoutTypeChange={setPayoutType}
-          filingStatus={filingStatus}
-          onFilingStatusChange={setFilingStatus}
-          netTakeHome={taxCalc.netTakeHome}
+    <main className="min-h-screen py-8 md:py-12" ref={containerRef}>
+      <div className="container mx-auto px-4 max-w-4xl">
+        <ProgressIndicator
+          currentStep={currentStep}
+          totalSteps={5}
+          steps={stepsWithVisited}
+          onStepClick={goToStep}
         />
 
-        <DebtSection debts={debts} onDebtsChange={setDebts} />
+        <div className="transition-all duration-300 ease-in-out">
+          {/* Step 1: The Setup */}
+          {currentStep === 1 && (
+            <div className="animate-fadeIn">
+              <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
+                <div className="md:hidden mb-6">
+                  <h2 className="text-3xl font-bold text-primary-purple">The Setup</h2>
+                </div>
+                <JackpotInput
+                  jackpot={jackpot}
+                  onJackpotChange={setJackpot}
+                  state={state}
+                  onStateChange={setState}
+                  payoutType={payoutType}
+                  onPayoutTypeChange={setPayoutType}
+                  filingStatus={filingStatus}
+                  onFilingStatusChange={setFilingStatus}
+                  netTakeHome={taxCalc.netTakeHome}
+                />
+                <WizardNavigation
+                  currentStep={currentStep}
+                  totalSteps={5}
+                  onBack={handleBack}
+                  onNext={handleNext}
+                  nextLabel="Next: Clear Your Debts →"
+                />
+              </div>
+            </div>
+          )}
 
-        <LifestyleSection items={lifestyleItems} onItemsChange={setLifestyleItems} />
+          {/* Step 2: Clear the Deck */}
+          {currentStep === 2 && (
+            <div className="animate-fadeIn">
+              <div className="md:hidden mb-6 text-center">
+                <h2 className="text-3xl font-bold text-primary-purple">Clear the Deck</h2>
+              </div>
+              <DebtSection debts={debts} onDebtsChange={setDebts} />
+              <WizardNavigation
+                currentStep={currentStep}
+                totalSteps={5}
+                onBack={handleBack}
+                onNext={handleNext}
+                nextLabel="Next: Dream Big →"
+              />
+            </div>
+          )}
 
-        <InvestmentSection
-          defaultAmount={investmentAmount}
-          onInvestmentChange={(amount, returnRate) => {
-            setInvestmentAmount(amount)
-            setAnnualReturn(returnRate)
-          }}
-        />
+          {/* Step 3: Fun + Dreams */}
+          {currentStep === 3 && (
+            <div className="animate-fadeIn">
+              <div className="md:hidden mb-6 text-center">
+                <h2 className="text-3xl font-bold text-primary-purple">Fun + Dreams</h2>
+              </div>
+              <LifestyleSection items={lifestyleItems} onItemsChange={setLifestyleItems} />
+              <WizardNavigation
+                currentStep={currentStep}
+                totalSteps={5}
+                onBack={handleBack}
+                onNext={handleNext}
+                nextLabel="Next: Invest for the Future →"
+              />
+            </div>
+          )}
 
-        <SummaryDashboard
-          netTakeHome={taxCalc.netTakeHome}
-          debtsCleared={debtsCleared}
-          lifestyleDreams={lifestyleDreams}
-          invested={investmentAmount}
-          projections={projections}
-        />
+          {/* Step 4: The Future */}
+          {currentStep === 4 && (
+            <div className="animate-fadeIn">
+              <div className="md:hidden mb-6 text-center">
+                <h2 className="text-3xl font-bold text-primary-purple">The Future</h2>
+              </div>
+              <InvestmentSection
+                defaultAmount={investmentAmount}
+                onInvestmentChange={(amount, returnRate) => {
+                  setInvestmentAmount(amount)
+                  setAnnualReturn(returnRate)
+                }}
+              />
+              <WizardNavigation
+                currentStep={currentStep}
+                totalSteps={5}
+                onBack={handleBack}
+                onNext={handleNext}
+                isLastStep={true}
+              />
+            </div>
+          )}
 
-        <div ref={dreamLifeRef}>
-          <DreamLifeCost lifestyleDreams={lifestyleDreams} />
+          {/* Step 5: Your Results */}
+          {currentStep === 5 && (
+            <div className="animate-fadeIn space-y-8">
+              <div className="md:hidden mb-6 text-center">
+                <h2 className="text-3xl font-bold text-primary-purple">Your Results</h2>
+              </div>
+
+              <SummaryDashboard
+                netTakeHome={taxCalc.netTakeHome}
+                debtsCleared={debtsCleared}
+                lifestyleDreams={lifestyleDreams}
+                invested={investmentAmount}
+                projections={projections}
+              />
+
+              <DreamLifeCost lifestyleDreams={lifestyleDreams} />
+
+              <RealityCheck />
+
+              <div className="text-center">
+                <button
+                  onClick={() => setShowEmailGate(true)}
+                  className="px-8 py-4 bg-gradient-to-r from-primary-purple to-light-lavender text-white font-semibold rounded-lg hover:shadow-xl transition-all text-lg"
+                >
+                  Get My Personalized Report
+                </button>
+              </div>
+
+              <WizardNavigation
+                currentStep={currentStep}
+                totalSteps={5}
+                onBack={handleBack}
+                onNext={() => setShowEmailGate(true)}
+                nextLabel="Get My Report →"
+              />
+            </div>
+          )}
         </div>
 
-        <RealityCheck />
-
-        <footer className="text-center py-8 text-sm text-navy/60">
+        <footer className="text-center py-8 text-sm text-navy/60 mt-8">
           <p className="mb-2">
             Built with ❤️ by{' '}
             <a

@@ -26,10 +26,13 @@ export default function LifestyleSection({ items, onItemsChange }: LifestyleSect
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
-      <div className="mb-8">
+      <div className="mb-8 hidden md:block">
         <h2 className="text-3xl md:text-4xl font-bold text-primary-purple mb-2">
           Fun + Dreams
         </h2>
+        <p className="text-lg text-navy">What would you actually DO with the money?</p>
+      </div>
+      <div className="mb-6 md:hidden">
         <p className="text-lg text-navy">What would you actually DO with the money?</p>
       </div>
 

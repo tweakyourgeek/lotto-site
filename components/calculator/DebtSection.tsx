@@ -30,10 +30,13 @@ export default function DebtSection({ debts, onDebtsChange }: DebtSectionProps) 
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
-      <div className="mb-8">
+      <div className="mb-8 hidden md:block">
         <h2 className="text-3xl md:text-4xl font-bold text-primary-purple mb-2">
           Clear the Deck
         </h2>
+        <p className="text-lg text-navy">What debts would you wipe out?</p>
+      </div>
+      <div className="mb-6 md:hidden">
         <p className="text-lg text-navy">What debts would you wipe out?</p>
       </div>
 
