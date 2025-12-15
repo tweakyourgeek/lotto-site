@@ -33,9 +33,9 @@ export default function JackpotInput({
 
   return (
     <div>
-      <div className="text-center mb-8">
-        <h1 className="text-3xl md:text-5xl font-bold text-primary-purple mb-4">
-          The Lottery Reality Check
+      <div className="text-center mb-6">
+        <h1 className="text-3xl md:text-5xl font-bold text-primary-purple mb-3">
+          Your Billion Dollar Blueprint
         </h1>
         <p className="text-lg md:text-xl text-navy">
           What would YOU do with a billion dollars?

@@ -5,9 +5,9 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'The Lottery Reality Check | Tweak Your Geek',
-  description: 'What would YOU do with a billion dollars? Find out what you really value when money isn\'t the constraint.',
-  keywords: 'lottery calculator, financial planning, lottery taxes, net winnings',
+  title: 'Your Billion Dollar Blueprint | Tweak Your Geek',
+  description: 'What would YOU do with a billion dollars? Plan your dream life with this interactive lottery calculator.',
+  keywords: 'lottery calculator, financial planning, dream life planner, lottery taxes, net winnings',
 }
 
 export default function RootLayout({

@@ -22,12 +22,12 @@ export default function ProgressIndicator({
   const progress = (currentStep / totalSteps) * 100
 
   return (
-    <div className="mb-8">
+    <div className="mb-6">
       {/* Progress Bar */}
-      <div className="mb-6">
-        <div className="flex justify-between text-sm text-navy/60 mb-2">
-          <span>Step {currentStep} of {totalSteps}</span>
-          <span>{Math.round(progress)}% Complete</span>
+      <div className="mb-4">
+        <div className="flex justify-between text-sm mb-2">
+          <span className="text-navy/70 font-medium">Step {currentStep} of {totalSteps}</span>
+          <span className="text-primary-purple font-bold">{Math.round(progress)}% Complete</span>
         </div>
         <div className="h-2 bg-light-blush rounded-full overflow-hidden">
           <div
@@ -45,7 +45,7 @@ export default function ProgressIndicator({
               onClick={() => step.visited && onStepClick(step.number)}
               disabled={!step.visited}
               className={`
-                relative z-10 flex items-center justify-center w-10 h-10 rounded-full font-semibold text-sm
+                relative z-10 flex items-center justify-center w-8 h-8 rounded-full font-semibold text-xs
                 transition-all duration-300
                 ${
                   step.number === currentStep
@@ -61,7 +61,7 @@ export default function ProgressIndicator({
               {step.number}
             </button>
             {index < steps.length - 1 && (
-              <div className="flex-1 h-1 mx-2 bg-light-blush rounded">
+              <div className="flex-1 h-1 mx-1 bg-light-blush rounded">
                 <div
                   className={`h-full rounded transition-all duration-500 ${
                     step.number < currentStep ? 'bg-light-lavender' : 'bg-transparent'
@@ -74,13 +74,13 @@ export default function ProgressIndicator({
       </div>
 
       {/* Step Titles - Hidden on mobile */}
-      <div className="hidden md:flex items-center justify-between mt-3">
+      <div className="hidden md:flex items-center justify-between mt-2">
         {steps.map((step) => (
           <div
             key={step.number}
             className={`flex-1 text-center text-xs font-medium transition-colors ${
               step.number === currentStep
-                ? 'text-primary-purple'
+                ? 'text-primary-purple font-bold'
                 : step.visited
                 ? 'text-navy/60'
                 : 'text-navy/30'
@@ -92,7 +92,7 @@ export default function ProgressIndicator({
       </div>
 
       {/* Current Step Title - Mobile */}
-      <div className="md:hidden text-center mt-4">
+      <div className="md:hidden text-center mt-3">
         <h2 className="text-2xl font-bold text-primary-purple">
           {steps.find((s) => s.number === currentStep)?.title}
         </h2>
