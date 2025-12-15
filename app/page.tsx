@@ -402,7 +402,7 @@ export default function Home() {
 
         <footer className="text-center py-6 text-sm text-navy/60 mt-6">
           <p className="mb-2">
-            Built with ❤️ by{' '}
+            Built with <span className="text-primary-purple">❤️</span> by{' '}
             <a
               href="https://tweakyourgeek.com"
               target="_blank"
