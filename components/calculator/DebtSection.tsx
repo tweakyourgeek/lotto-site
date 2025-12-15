@@ -8,6 +8,7 @@ export interface Debt {
   label: string
   amount: number
   enabled: boolean
+  notes?: string
 }
 
 interface DebtSectionProps {
@@ -78,6 +79,17 @@ export default function DebtSection({ debts, onDebtsChange }: DebtSectionProps) 
                     <div
                       className="bg-gradient-to-r from-light-lavender to-dusty-rose h-full transition-all duration-300"
                       style={{ width: `${(debt.amount / maxDebt) * 100}%` }}
+                    />
+                  </div>
+                )}
+                {debt.enabled && (
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      value={debt.notes || ''}
+                      onChange={(e) => updateDebt(debt.id, { notes: e.target.value })}
+                      placeholder="Notes (optional)"
+                      className="w-full px-3 py-1.5 text-sm border border-dusty-rose/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-light-lavender italic text-navy/70"
                     />
                   </div>
                 )}

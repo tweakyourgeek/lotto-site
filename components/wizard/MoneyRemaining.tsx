@@ -28,25 +28,25 @@ export default function MoneyRemaining({
   const isFullyAllocated = Math.abs(remaining) < 1000 // Within $1k = "perfect"
 
   return (
-    <div className="mb-8 bg-gradient-to-r from-primary-purple to-light-lavender rounded-xl p-6 text-white shadow-lg">
-      <div className="flex items-center justify-between mb-4">
+    <div className="mb-4 bg-gradient-to-r from-primary-purple to-light-lavender rounded-lg p-4 text-white shadow-md">
+      <div className="flex items-center justify-between mb-2">
         <div>
-          <p className="text-sm opacity-90">Your Windfall</p>
-          <p className="text-2xl font-bold">{formatCurrency(netTakeHome)}</p>
+          <p className="text-xs opacity-90">Your Windfall</p>
+          <p className="text-lg font-bold">{formatCurrency(netTakeHome)}</p>
         </div>
         <div className="text-right">
-          <p className="text-sm opacity-90">
+          <p className="text-xs opacity-90">
             {isOverspent ? 'Over Budget' : isFullyAllocated ? 'Fully Allocated!' : 'Remaining'}
           </p>
-          <p className={`text-2xl font-bold ${isOverspent ? 'text-red-200' : isFullyAllocated ? 'text-green-200' : ''}`}>
+          <p className={`text-lg font-bold ${isOverspent ? 'text-red-200' : isFullyAllocated ? 'text-green-200' : ''}`}>
             {isOverspent ? '-' : ''}{formatCurrency(Math.abs(remaining))}
           </p>
         </div>
       </div>
 
       {/* Progress bar */}
-      <div className="mb-3">
-        <div className="h-3 bg-white/20 rounded-full overflow-hidden">
+      <div className="mb-2">
+        <div className="h-2 bg-white/20 rounded-full overflow-hidden">
           <div
             className={`h-full transition-all duration-500 ${
               isOverspent
@@ -61,7 +61,7 @@ export default function MoneyRemaining({
       </div>
 
       {/* Breakdown */}
-      <div className="grid grid-cols-3 gap-4 text-sm">
+      <div className="grid grid-cols-3 gap-2 text-xs">
         {currentStep >= 2 && debtsCleared > 0 && (
           <div>
             <p className="opacity-75">Debts Cleared</p>
@@ -83,12 +83,12 @@ export default function MoneyRemaining({
       </div>
 
       {isOverspent && (
-        <p className="text-xs mt-3 opacity-90 italic">
+        <p className="text-xs mt-2 opacity-90 italic">
           You're dreaming big! Consider adjusting your allocations.
         </p>
       )}
       {isFullyAllocated && (
-        <p className="text-xs mt-3 opacity-90 italic">
+        <p className="text-xs mt-2 opacity-90 italic">
           Perfect! You've allocated every dollar.
         </p>
       )}

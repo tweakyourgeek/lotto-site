@@ -273,6 +273,9 @@ export default function Home() {
                   filingStatus={filingStatus}
                   onFilingStatusChange={setFilingStatus}
                   netTakeHome={taxCalc.netTakeHome}
+                  lumpSum={taxCalc.lumpSum}
+                  federalTax={taxCalc.federalTax}
+                  stateTax={taxCalc.stateTax}
                 />
                 <WizardNavigation
                   currentStep={currentStep}
