@@ -212,7 +212,9 @@ export default function Home() {
 
   return (
     <main className="min-h-screen py-8 md:py-12" ref={containerRef}>
-      <div className="container mx-auto px-4 max-w-4xl">
+      <div className={`container mx-auto px-4 transition-all duration-300 ${
+        currentStep === 5 ? 'max-w-7xl' : 'max-w-4xl'
+      }`}>
         <ProgressIndicator
           currentStep={currentStep}
           totalSteps={5}
