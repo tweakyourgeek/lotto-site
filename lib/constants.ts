@@ -1,0 +1,87 @@
+export const STATE_TAX_RATES: Record<string, number> = {
+  'Alabama': 0,
+  'Alaska': 0,
+  'Arizona': 4.8,
+  'Arkansas': 5.5,
+  'California': 13.3,
+  'Colorado': 4.55,
+  'Connecticut': 6.99,
+  'Delaware': 6.6,
+  'Florida': 0,
+  'Georgia': 5.75,
+  'Hawaii': 11.0,
+  'Idaho': 6.5,
+  'Illinois': 4.95,
+  'Indiana': 3.23,
+  'Iowa': 8.53,
+  'Kansas': 5.7,
+  'Kentucky': 5.0,
+  'Louisiana': 6.0,
+  'Maine': 7.15,
+  'Maryland': 8.95,
+  'Massachusetts': 5.0,
+  'Michigan': 4.25,
+  'Minnesota': 9.85,
+  'Mississippi': 5.0,
+  'Missouri': 5.4,
+  'Montana': 6.9,
+  'Nebraska': 6.84,
+  'Nevada': 0,
+  'New Hampshire': 0,
+  'New Jersey': 10.75,
+  'New Mexico': 5.9,
+  'New York': 10.9,
+  'North Carolina': 4.99,
+  'North Dakota': 2.9,
+  'Ohio': 3.99,
+  'Oklahoma': 5.0,
+  'Oregon': 9.9,
+  'Pennsylvania': 3.07,
+  'Rhode Island': 5.99,
+  'South Carolina': 7.0,
+  'South Dakota': 0,
+  'Tennessee': 0,
+  'Texas': 0,
+  'Utah': 4.95,
+  'Vermont': 8.75,
+  'Virginia': 5.75,
+  'Washington': 0,
+  'West Virginia': 6.5,
+  'Wisconsin': 7.65,
+  'Wyoming': 0,
+}
+
+export const DEFAULT_DEBTS = [
+  { id: 'mortgage', label: 'Mortgage', amount: 450000, enabled: true },
+  { id: 'credit-cards', label: 'Credit Cards', amount: 35000, enabled: true },
+  { id: 'student-loans', label: 'Student Loans', amount: 85000, enabled: true },
+  { id: 'car-loan', label: 'Car Loan', amount: 42000, enabled: true },
+  { id: 'medical-bills', label: 'Medical Bills', amount: 18500, enabled: true },
+  { id: 'family-support', label: 'Parent/Family Support', amount: 50000, enabled: true },
+  { id: 'business-loan', label: 'Business Loan', amount: 125000, enabled: true },
+]
+
+export const DEFAULT_LIFESTYLE = [
+  { id: 'dream-home', label: 'Dream Home', amount: 3500000, why: 'Space to breathe and grow' },
+  { id: 'travel', label: 'Travel Fund', amount: 750000, why: 'See the world without worrying' },
+  { id: 'family-gifts', label: 'Family Gifts', amount: 500000, why: 'Take care of the people I love' },
+  { id: 'education', label: 'Education Fund', amount: 200000, why: 'Learning and growing' },
+  { id: 'vehicles', label: 'New Vehicles', amount: 350000, why: 'Reliable transportation' },
+  { id: 'renovation', label: 'Home Renovation', amount: 500000, why: 'Create the perfect space' },
+  { id: 'experiences', label: 'Experiences', amount: 300000, why: 'Making memories' },
+  { id: 'charity', label: 'Charity', amount: 250000, why: 'Give back to my community' },
+]
+
+export const DEFAULT_ANNUAL_EXPENSES = [
+  { id: 'housing', label: 'Housing (utilities, maintenance, property tax)', amount: 60000 },
+  { id: 'travel', label: 'Travel Budget', amount: 50000 },
+  { id: 'charity', label: 'Giving/Charity', amount: 25000 },
+  { id: 'entertainment', label: 'Fun/Entertainment', amount: 30000 },
+  { id: 'transport', label: 'Car/Transport', amount: 15000 },
+  { id: 'other', label: 'Everything Else', amount: 20000 },
+]
+
+export const LUMP_SUM_PERCENTAGE = 0.458 // Actual average cash option (~45.8%)
+export const FEDERAL_WITHHOLDING = 0.24
+export const ADDITIONAL_FEDERAL_TAX = 0.13
+export const TOTAL_FEDERAL_TAX = FEDERAL_WITHHOLDING + ADDITIONAL_FEDERAL_TAX // 37% total
