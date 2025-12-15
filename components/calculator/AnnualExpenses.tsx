@@ -24,20 +24,20 @@ export default function AnnualExpenses({ expenses, onExpensesChange }: AnnualExp
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
-      <div className="mb-8 hidden md:block">
+    <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10">
+      <div className="mb-4 hidden md:block">
         <h2 className="text-3xl md:text-4xl font-bold text-primary-purple mb-2">
           Your Annual Lifestyle
         </h2>
         <p className="text-lg text-navy">What does it cost to live your dream life each year?</p>
       </div>
-      <div className="mb-6 md:hidden">
+      <div className="mb-4 md:hidden">
         <p className="text-lg text-navy">What does it cost to live your dream life each year?</p>
       </div>
 
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {expenses.map((expense) => (
-          <div key={expense.id} className="border-b border-light-blush pb-4">
+          <div key={expense.id} className="border-b border-light-blush pb-3">
             <label htmlFor={`expense-${expense.id}`} className="block font-medium text-navy mb-2">
               {expense.label}
             </label>
@@ -71,13 +71,13 @@ export default function AnnualExpenses({ expenses, onExpensesChange }: AnnualExp
         ))}
       </div>
 
-      <div className="mt-8 pt-6 border-t-2 border-dusty-rose">
+      <div className="mt-4 pt-4 border-t-2 border-dusty-rose md:col-span-2">
         <div className="text-center">
           <p className="text-sm text-navy mb-2">Total Annual Expenses</p>
           <div className="text-4xl md:text-5xl font-bold text-primary-purple">
             {formatCurrency(totalAnnual)}
           </div>
-          <p className="text-lg text-mauve-pink mt-4 italic">
+          <p className="text-lg text-mauve-pink mt-3 italic">
             This is what your dream life costs to maintain.
           </p>
         </div>

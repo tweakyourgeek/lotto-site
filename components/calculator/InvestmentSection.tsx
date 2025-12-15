@@ -72,7 +72,7 @@ export default function InvestmentSection({
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10">
-      <div className="mb-6 hidden md:block">
+      <div className="mb-4 hidden md:block">
         <h2 className="text-3xl md:text-4xl font-bold text-primary-purple mb-2">
           The Future
         </h2>
@@ -83,7 +83,7 @@ export default function InvestmentSection({
       </div>
 
       {remainingMoney > 1000 && (
-        <div className="mb-6 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg">
+        <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg">
           <p className="text-sm font-semibold text-yellow-900 mb-2">
             You have {formatCurrency(remainingMoney)} not allocated yet!
           </p>
@@ -166,16 +166,16 @@ export default function InvestmentSection({
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-          <div className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div className="space-y-2">
             <h3 className="font-semibold text-navy text-sm">If you never touch your investments:</h3>
-            <div className="bg-light-blush rounded-xl p-4">
+            <div className="bg-light-blush rounded-xl p-3">
               <p className="text-xs text-navy mb-1">In 10 Years</p>
               <div className="text-2xl font-bold text-primary-purple">
                 {formatCurrency(value10YearsNoWithdrawals)}
               </div>
             </div>
-            <div className="bg-gradient-to-br from-light-lavender to-dusty-rose rounded-xl p-4">
+            <div className="bg-gradient-to-br from-light-lavender to-dusty-rose rounded-xl p-3">
               <p className="text-xs text-white mb-1">In 30 Years</p>
               <div className="text-2xl font-bold text-white">
                 {formatCurrency(value30YearsNoWithdrawals)}
@@ -183,15 +183,15 @@ export default function InvestmentSection({
             </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2">
             <h3 className="font-semibold text-navy text-sm">If you withdraw {formatCurrency(annualExpenses)}/year:</h3>
-            <div className="bg-light-blush rounded-xl p-4">
+            <div className="bg-light-blush rounded-xl p-3">
               <p className="text-xs text-navy mb-1">In 10 Years</p>
               <div className="text-2xl font-bold text-primary-purple">
                 {formatCurrency(Math.max(0, value10YearsWithWithdrawals))}
               </div>
             </div>
-            <div className="bg-gradient-to-br from-primary-purple to-navy rounded-xl p-4">
+            <div className="bg-gradient-to-br from-primary-purple to-navy rounded-xl p-3">
               <p className="text-xs text-white mb-1">In 30 Years</p>
               <div className="text-2xl font-bold text-white">
                 {formatCurrency(Math.max(0, value30YearsWithWithdrawals))}

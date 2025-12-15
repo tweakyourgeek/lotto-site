@@ -25,20 +25,20 @@ export default function LifestyleSection({ items, onItemsChange }: LifestyleSect
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
-      <div className="mb-8 hidden md:block">
+    <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10">
+      <div className="mb-4 hidden md:block">
         <h2 className="text-3xl md:text-4xl font-bold text-primary-purple mb-2">
           Fun + Dreams
         </h2>
         <p className="text-lg text-navy">What would you actually DO with the money?</p>
       </div>
-      <div className="mb-6 md:hidden">
+      <div className="mb-4 md:hidden">
         <p className="text-lg text-navy">What would you actually DO with the money?</p>
       </div>
 
-      <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {items.map((item) => (
-          <div key={item.id} className="border-b border-light-blush pb-6">
+          <div key={item.id} className="border-b border-light-blush pb-3">
             <div className="mb-3">
               <label htmlFor={`lifestyle-${item.id}`} className="block font-medium text-navy mb-2">
                 {item.label}
@@ -82,13 +82,13 @@ export default function LifestyleSection({ items, onItemsChange }: LifestyleSect
         ))}
       </div>
 
-      <div className="mt-8 pt-6 border-t-2 border-dusty-rose">
+      <div className="mt-4 pt-4 border-t-2 border-dusty-rose md:col-span-2">
         <div className="text-center">
           <p className="text-sm text-navy mb-2">Total Dreams</p>
           <div className="text-4xl md:text-5xl font-bold text-primary-purple">
             {formatCurrency(totalDreams)}
           </div>
-          <p className="text-lg text-mauve-pink mt-4 italic">
+          <p className="text-lg text-mauve-pink mt-3 italic">
             Notice what showed up on your list?
           </p>
         </div>
