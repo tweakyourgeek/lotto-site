@@ -72,7 +72,7 @@ export const DEFAULT_LIFESTYLE = [
   { id: 'charity', label: 'Charity', amount: 250000, why: 'Give back to my community' },
 ]
 
-export const LUMP_SUM_PERCENTAGE = 0.6
+export const LUMP_SUM_PERCENTAGE = 0.458 // Actual average cash option (~45.8%)
 export const FEDERAL_WITHHOLDING = 0.24
 export const ADDITIONAL_FEDERAL_TAX = 0.13
-export const TOTAL_FEDERAL_TAX = FEDERAL_WITHHOLDING + ADDITIONAL_FEDERAL_TAX
+export const TOTAL_FEDERAL_TAX = FEDERAL_WITHHOLDING + ADDITIONAL_FEDERAL_TAX // 37% total

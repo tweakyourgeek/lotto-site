@@ -11,6 +11,7 @@ import EmailGate from '@/components/calculator/EmailGate'
 import RealityCheck from '@/components/calculator/RealityCheck'
 import ProgressIndicator from '@/components/wizard/ProgressIndicator'
 import WizardNavigation from '@/components/wizard/WizardNavigation'
+import MoneyRemaining from '@/components/wizard/MoneyRemaining'
 import { calculateNetTakeHome, calculateProjections } from '@/lib/calculations'
 import { DEFAULT_DEBTS, DEFAULT_LIFESTYLE } from '@/lib/constants'
 import { saveWizardData, loadWizardData } from '@/lib/storage'
@@ -217,6 +218,14 @@ export default function Home() {
           totalSteps={5}
           steps={stepsWithVisited}
           onStepClick={goToStep}
+        />
+
+        <MoneyRemaining
+          netTakeHome={taxCalc.netTakeHome}
+          debtsCleared={debtsCleared}
+          lifestyleDreams={lifestyleDreams}
+          invested={investmentAmount}
+          currentStep={currentStep}
         />
 
         <div className="transition-all duration-300 ease-in-out">
