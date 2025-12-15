@@ -344,6 +344,8 @@ export default function Home() {
               </div>
               <InvestmentSection
                 defaultAmount={investmentAmount}
+                remainingMoney={taxCalc.netTakeHome - debtsCleared - lifestyleDreams - investmentAmount}
+                annualExpenses={totalAnnualExpenses}
                 onInvestmentChange={(amount, returnRate) => {
                   setInvestmentAmount(amount)
                   setAnnualReturn(returnRate)
