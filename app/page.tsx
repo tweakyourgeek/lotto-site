@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import JackpotInput from '@/components/calculator/JackpotInput'
 import DebtSection from '@/components/calculator/DebtSection'
 import LifestyleSection from '@/components/calculator/LifestyleSection'
+import AnnualExpenses from '@/components/calculator/AnnualExpenses'
 import InvestmentSection from '@/components/calculator/InvestmentSection'
 import SummaryDashboard from '@/components/charts/SummaryDashboard'
 import DreamLifeCost from '@/components/calculator/DreamLifeCost'
@@ -12,18 +13,21 @@ import RealityCheck from '@/components/calculator/RealityCheck'
 import ProgressIndicator from '@/components/wizard/ProgressIndicator'
 import WizardNavigation from '@/components/wizard/WizardNavigation'
 import MoneyRemaining from '@/components/wizard/MoneyRemaining'
+import StartOverButton from '@/components/wizard/StartOverButton'
 import { calculateNetTakeHome, calculateProjections } from '@/lib/calculations'
-import { DEFAULT_DEBTS, DEFAULT_LIFESTYLE } from '@/lib/constants'
-import { saveWizardData, loadWizardData } from '@/lib/storage'
+import { DEFAULT_DEBTS, DEFAULT_LIFESTYLE, DEFAULT_ANNUAL_EXPENSES } from '@/lib/constants'
+import { saveWizardData, loadWizardData, clearWizardData } from '@/lib/storage'
 import type { Debt } from '@/components/calculator/DebtSection'
 import type { LifestyleItem } from '@/components/calculator/LifestyleSection'
+import type { AnnualExpense } from '@/components/calculator/AnnualExpenses'
 
 const STEPS = [
   { number: 1, title: 'The Setup' },
   { number: 2, title: 'Clear the Deck' },
   { number: 3, title: 'Fun + Dreams' },
-  { number: 4, title: 'The Future' },
-  { number: 5, title: 'Your Results' },
+  { number: 4, title: 'Annual Lifestyle' },
+  { number: 5, title: 'The Future' },
+  { number: 6, title: 'Your Results' },
 ]
 
 export default function Home() {
@@ -35,6 +39,7 @@ export default function Home() {
   const [filingStatus, setFilingStatus] = useState('single')
   const [debts, setDebts] = useState<Debt[]>(DEFAULT_DEBTS)
   const [lifestyleItems, setLifestyleItems] = useState<LifestyleItem[]>(DEFAULT_LIFESTYLE)
+  const [annualExpenses, setAnnualExpenses] = useState<AnnualExpense[]>(DEFAULT_ANNUAL_EXPENSES)
   const [investmentAmount, setInvestmentAmount] = useState(0)
   const [annualReturn, setAnnualReturn] = useState(7)
   const [showEmailGate, setShowEmailGate] = useState(false)
@@ -53,6 +58,7 @@ export default function Home() {
     if (saved.filingStatus) setFilingStatus(saved.filingStatus)
     if (saved.debts) setDebts(saved.debts)
     if (saved.lifestyleItems) setLifestyleItems(saved.lifestyleItems)
+    if (saved.annualExpenses) setAnnualExpenses(saved.annualExpenses)
     if (saved.investmentAmount) setInvestmentAmount(saved.investmentAmount)
     if (saved.annualReturn) setAnnualReturn(saved.annualReturn)
     setIsLoaded(true)
@@ -61,6 +67,7 @@ export default function Home() {
   const taxCalc = calculateNetTakeHome(jackpot, state, payoutType)
   const debtsCleared = debts.filter((d) => d.enabled).reduce((sum, d) => sum + d.amount, 0)
   const lifestyleDreams = lifestyleItems.reduce((sum, item) => sum + item.amount, 0)
+  const totalAnnualExpenses = annualExpenses.reduce((sum, exp) => sum + exp.amount, 0)
 
   // Auto-set investment to 50% of net take-home
   useEffect(() => {
@@ -84,10 +91,11 @@ export default function Home() {
       filingStatus,
       debts,
       lifestyleItems,
+      annualExpenses,
       investmentAmount,
       annualReturn,
     })
-  }, [currentStep, visitedSteps, jackpot, state, payoutType, filingStatus, debts, lifestyleItems, investmentAmount, annualReturn, isLoaded])
+  }, [currentStep, visitedSteps, jackpot, state, payoutType, filingStatus, debts, lifestyleItems, annualExpenses, investmentAmount, annualReturn, isLoaded])
 
   // Track analytics
   useEffect(() => {
@@ -98,7 +106,7 @@ export default function Home() {
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [jackpot, state, debts, lifestyleItems, investmentAmount, isLoaded])
+  }, [jackpot, state, debts, lifestyleItems, annualExpenses, investmentAmount, isLoaded])
 
   const trackAnalytics = async () => {
     try {
@@ -135,6 +143,7 @@ export default function Home() {
             payoutType,
             debts: debts.filter((d) => d.enabled),
             lifestyleItems,
+            annualExpenses,
             investmentAmount,
             annualReturn,
             debtsCleared,
@@ -155,6 +164,7 @@ export default function Home() {
           state,
           debts: debts.filter((d) => d.enabled),
           lifestyleItems,
+          annualExpenses,
           investmentAmount,
           annualReturn,
           debtsCleared,
@@ -186,15 +196,13 @@ export default function Home() {
     if (!visitedSteps.includes(step)) {
       setVisitedSteps([...visitedSteps, step])
     }
-    // Scroll to top
     containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   const handleNext = () => {
-    if (currentStep < 5) {
+    if (currentStep < 6) {
       goToStep(currentStep + 1)
     } else {
-      // On final step, show email gate
       setShowEmailGate(true)
     }
   }
@@ -205,19 +213,36 @@ export default function Home() {
     }
   }
 
+  const handleStartOver = () => {
+    clearWizardData()
+    setCurrentStep(1)
+    setVisitedSteps([1])
+    setJackpot(1000000000)
+    setState('Washington')
+    setPayoutType('lump-sum')
+    setFilingStatus('single')
+    setDebts(DEFAULT_DEBTS)
+    setLifestyleItems(DEFAULT_LIFESTYLE)
+    setAnnualExpenses(DEFAULT_ANNUAL_EXPENSES)
+    setInvestmentAmount(0)
+    setAnnualReturn(7)
+    setShowEmailGate(false)
+    containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   const stepsWithVisited = STEPS.map((step) => ({
     ...step,
     visited: visitedSteps.includes(step.number),
   }))
 
   return (
-    <main className="min-h-screen py-8 md:py-12" ref={containerRef}>
-      <div className={`container mx-auto px-4 transition-all duration-300 ${
-        currentStep === 5 ? 'max-w-7xl' : 'max-w-4xl'
-      }`}>
+    <main className="min-h-screen py-4 md:py-8" ref={containerRef}>
+      <div className="container mx-auto px-4 max-w-7xl">
+        <StartOverButton onStartOver={handleStartOver} />
+
         <ProgressIndicator
           currentStep={currentStep}
-          totalSteps={5}
+          totalSteps={6}
           steps={stepsWithVisited}
           onStepClick={goToStep}
         />
@@ -234,8 +259,8 @@ export default function Home() {
           {/* Step 1: The Setup */}
           {currentStep === 1 && (
             <div className="animate-fadeIn">
-              <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
-                <div className="md:hidden mb-6">
+              <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10">
+                <div className="md:hidden mb-4">
                   <h2 className="text-3xl font-bold text-primary-purple">The Setup</h2>
                 </div>
                 <JackpotInput
@@ -251,7 +276,7 @@ export default function Home() {
                 />
                 <WizardNavigation
                   currentStep={currentStep}
-                  totalSteps={5}
+                  totalSteps={6}
                   onBack={handleBack}
                   onNext={handleNext}
                   nextLabel="Next: Clear Your Debts →"
@@ -263,13 +288,13 @@ export default function Home() {
           {/* Step 2: Clear the Deck */}
           {currentStep === 2 && (
             <div className="animate-fadeIn">
-              <div className="md:hidden mb-6 text-center">
+              <div className="md:hidden mb-4 text-center">
                 <h2 className="text-3xl font-bold text-primary-purple">Clear the Deck</h2>
               </div>
               <DebtSection debts={debts} onDebtsChange={setDebts} />
               <WizardNavigation
                 currentStep={currentStep}
-                totalSteps={5}
+                totalSteps={6}
                 onBack={handleBack}
                 onNext={handleNext}
                 nextLabel="Next: Dream Big →"
@@ -280,13 +305,30 @@ export default function Home() {
           {/* Step 3: Fun + Dreams */}
           {currentStep === 3 && (
             <div className="animate-fadeIn">
-              <div className="md:hidden mb-6 text-center">
+              <div className="md:hidden mb-4 text-center">
                 <h2 className="text-3xl font-bold text-primary-purple">Fun + Dreams</h2>
               </div>
               <LifestyleSection items={lifestyleItems} onItemsChange={setLifestyleItems} />
               <WizardNavigation
                 currentStep={currentStep}
-                totalSteps={5}
+                totalSteps={6}
+                onBack={handleBack}
+                onNext={handleNext}
+                nextLabel="Next: Annual Lifestyle →"
+              />
+            </div>
+          )}
+
+          {/* Step 4: Annual Lifestyle */}
+          {currentStep === 4 && (
+            <div className="animate-fadeIn">
+              <div className="md:hidden mb-4 text-center">
+                <h2 className="text-3xl font-bold text-primary-purple">Annual Lifestyle</h2>
+              </div>
+              <AnnualExpenses expenses={annualExpenses} onExpensesChange={setAnnualExpenses} />
+              <WizardNavigation
+                currentStep={currentStep}
+                totalSteps={6}
                 onBack={handleBack}
                 onNext={handleNext}
                 nextLabel="Next: Invest for the Future →"
@@ -294,10 +336,10 @@ export default function Home() {
             </div>
           )}
 
-          {/* Step 4: The Future */}
-          {currentStep === 4 && (
+          {/* Step 5: The Future */}
+          {currentStep === 5 && (
             <div className="animate-fadeIn">
-              <div className="md:hidden mb-6 text-center">
+              <div className="md:hidden mb-4 text-center">
                 <h2 className="text-3xl font-bold text-primary-purple">The Future</h2>
               </div>
               <InvestmentSection
@@ -309,18 +351,18 @@ export default function Home() {
               />
               <WizardNavigation
                 currentStep={currentStep}
-                totalSteps={5}
+                totalSteps={6}
                 onBack={handleBack}
                 onNext={handleNext}
-                isLastStep={true}
+                nextLabel="See My Results →"
               />
             </div>
           )}
 
-          {/* Step 5: Your Results */}
-          {currentStep === 5 && (
-            <div className="animate-fadeIn space-y-8">
-              <div className="md:hidden mb-6 text-center">
+          {/* Step 6: Your Results */}
+          {currentStep === 6 && (
+            <div className="animate-fadeIn space-y-6">
+              <div className="md:hidden mb-4 text-center">
                 <h2 className="text-3xl font-bold text-primary-purple">Your Results</h2>
               </div>
 
@@ -332,7 +374,7 @@ export default function Home() {
                 projections={projections}
               />
 
-              <DreamLifeCost lifestyleDreams={lifestyleDreams} />
+              <DreamLifeCost annualExpenses={totalAnnualExpenses} />
 
               <RealityCheck />
 
@@ -347,7 +389,7 @@ export default function Home() {
 
               <WizardNavigation
                 currentStep={currentStep}
-                totalSteps={5}
+                totalSteps={6}
                 onBack={handleBack}
                 onNext={() => setShowEmailGate(true)}
                 nextLabel="Get My Report →"
@@ -356,7 +398,7 @@ export default function Home() {
           )}
         </div>
 
-        <footer className="text-center py-8 text-sm text-navy/60 mt-8">
+        <footer className="text-center py-6 text-sm text-navy/60 mt-6">
           <p className="mb-2">
             Built with ❤️ by{' '}
             <a

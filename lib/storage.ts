@@ -1,5 +1,6 @@
 import type { Debt } from '@/components/calculator/DebtSection'
 import type { LifestyleItem } from '@/components/calculator/LifestyleSection'
+import type { AnnualExpense } from '@/components/calculator/AnnualExpenses'
 
 export interface WizardData {
   currentStep: number
@@ -10,6 +11,7 @@ export interface WizardData {
   filingStatus: string
   debts: Debt[]
   lifestyleItems: LifestyleItem[]
+  annualExpenses: AnnualExpense[]
   investmentAmount: number
   annualReturn: number
 }

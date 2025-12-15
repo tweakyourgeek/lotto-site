@@ -3,11 +3,11 @@
 import { formatCurrency } from '@/lib/calculations'
 
 interface DreamLifeCostProps {
-  lifestyleDreams: number
+  annualExpenses: number
 }
 
-export default function DreamLifeCost({ lifestyleDreams }: DreamLifeCostProps) {
-  const annual = lifestyleDreams
+export default function DreamLifeCost({ annualExpenses }: DreamLifeCostProps) {
+  const annual = annualExpenses
   const monthly = annual / 12
   const weekly = annual / 52
   const daily = annual / 365
