@@ -52,16 +52,6 @@ export default function DreamLifeCost({ annualExpenses }: DreamLifeCostProps) {
         ))}
       </div>
 
-      <div className="mt-12 text-center">
-        <div className="inline-block bg-white/10 backdrop-blur-sm rounded-2xl p-8 max-w-2xl">
-          <p className="text-2xl md:text-3xl font-semibold mb-4">
-            Good news: You probably don't need a billion dollars.
-          </p>
-          <p className="text-xl opacity-90">
-            You need a plan.
-          </p>
-        </div>
-      </div>
     </div>
   )
 }

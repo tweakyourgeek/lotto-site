@@ -207,22 +207,16 @@ export function generatePDFHTML(data: PDFData): string {
       <span>Daily</span>
       <span>${formatCurrency(daily)}</span>
     </div>
-    <p style="text-align: center; font-size: 20px; margin-top: 30px;">
-      Good news: You probably don't need a billion dollars.<br>
-      <strong>You need a plan.</strong>
-    </p>
   </div>
 
   <div style="background: #ECD7D5; padding: 20px; border-radius: 10px; margin: 30px 0;">
-    <h3 style="color: #7A5980; margin-top: 0;">Next Steps</h3>
-    <p>Ready to build your actual dream life? Here's what you have access to:</p>
+    <h3 style="color: #7A5980; margin-top: 0;">While You're Waiting on Your Windfall...</h3>
+    <p>Let's help you reach your Dream Life, one step at a time.</p>
     <ul style="color: #3B3B58;">
       <li><strong>Dream Life Calculator:</strong> Plan your real financial goals</li>
-      <li><strong>No Spend Journal:</strong> Track your progress and build awareness</li>
-      <li><strong>Community Access:</strong> Connect with others on the same journey</li>
     </ul>
     <p style="text-align: center; margin-top: 20px;">
-      <a href="https://tweakyourgeek.net" style="color: #7A5980; font-weight: 600;">Visit Tweak Your Geek →</a>
+      <a href="https://tweakyourgeek.net" style="color: #7A5980; font-weight: 600;">Start Your Journey →</a>
     </p>
   </div>
 

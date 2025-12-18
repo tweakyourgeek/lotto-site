@@ -82,7 +82,7 @@ export default function InvestmentSection({
         <p className="text-lg text-navy">Let time do the heavy lifting</p>
       </div>
 
-      {remainingMoney > 1000 && (
+      {remainingMoney > 1000 && !investAll && (
         <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg">
           <p className="text-sm font-semibold text-yellow-900 mb-2">
             You have {formatCurrency(remainingMoney)} not allocated yet!
@@ -94,20 +94,21 @@ export default function InvestmentSection({
       )}
 
       <div className="space-y-4">
-        {remainingMoney > 1000 && (
-          <div className="flex items-center gap-3 p-4 bg-light-blush rounded-lg">
-            <input
-              type="checkbox"
-              id="invest-all"
-              checked={investAll}
-              onChange={(e) => handleInvestAllChange(e.target.checked)}
-              className="w-5 h-5 text-primary-purple border-dusty-rose rounded focus:ring-2 focus:ring-light-lavender"
-            />
-            <label htmlFor="invest-all" className="font-semibold text-navy cursor-pointer">
-              ☑️ Invest all remaining funds ({formatCurrency(remainingMoney)})
-            </label>
-          </div>
-        )}
+        <div className="flex items-center gap-3 p-4 bg-light-blush rounded-lg">
+          <input
+            type="checkbox"
+            id="invest-all"
+            checked={investAll}
+            onChange={(e) => handleInvestAllChange(e.target.checked)}
+            className="w-5 h-5 text-primary-purple border-dusty-rose rounded focus:ring-2 focus:ring-light-lavender"
+          />
+          <label htmlFor="invest-all" className="font-semibold text-navy cursor-pointer">
+            {investAll
+              ? '✓ Investing all remaining funds'
+              : `Invest all remaining funds ${remainingMoney > 0 ? `(${formatCurrency(remainingMoney)})` : ''}`
+            }
+          </label>
+        </div>
 
         <div>
           <label htmlFor="investment-amount" className="block font-medium text-navy mb-2">
