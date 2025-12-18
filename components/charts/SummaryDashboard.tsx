@@ -59,15 +59,15 @@ export default function SummaryDashboard({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div>
           <h3 className="text-xl font-semibold text-navy mb-4 text-center">Your Choices</h3>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={350}>
             <PieChart>
               <Pie
                 data={pieData}
                 cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
+                cy="45%"
+                labelLine={true}
+                label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                outerRadius={100}
                 fill="#8884d8"
                 dataKey="value"
               >
@@ -76,6 +76,7 @@ export default function SummaryDashboard({
                 ))}
               </Pie>
               <Tooltip formatter={(value) => formatCurrency(value as number)} />
+              <Legend verticalAlign="bottom" height={36} />
             </PieChart>
           </ResponsiveContainer>
         </div>

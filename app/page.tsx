@@ -34,7 +34,7 @@ const STEPS = [
   { number: 1, title: 'The Setup' },
   { number: 2, title: 'Clear the Deck' },
   { number: 3, title: 'Domiciles' },
-  { number: 4, title: 'Travel & Toys' },
+  { number: 4, title: 'Travel / Experiences' },
   { number: 5, title: 'Share the Wealth' },
   { number: 6, title: 'Your New Normal' },
   { number: 7, title: 'The Future' },
@@ -353,7 +353,7 @@ export default function Home() {
       case 2:
         return 'Next: Dream Homes'
       case 3:
-        return 'Next: Travel & Toys'
+        return 'Next: Travel / Experiences'
       case 4:
         return 'Next: Share the Wealth'
       case 5:
@@ -464,18 +464,18 @@ export default function Home() {
             </div>
           )}
 
-          {/* Step 4: Travel & Toys */}
+          {/* Step 4: Travel / Epic Experiences */}
           {currentStep === 4 && (
             <div className="animate-fadeIn">
               <div className="md:hidden mb-4 text-center">
-                <h2 className="text-3xl font-bold text-primary-purple">Travel & Toys</h2>
+                <h2 className="text-3xl font-bold text-primary-purple">Travel / Epic Experiences</h2>
               </div>
               <SpendingSection
-                title="Travel & Toys"
-                subtitle="What adventures await? What toys have you always wanted?"
+                title="Travel / Epic Experiences"
+                subtitle="What adventures await? What luxury items have you always wanted?"
                 items={travelToys}
                 onItemsChange={setTravelToys}
-                totalLabel="Total Fun Fund"
+                totalLabel="Total Luxury Fund"
                 emptyMessage="Saving it all for later?"
               />
               <WizardNavigation

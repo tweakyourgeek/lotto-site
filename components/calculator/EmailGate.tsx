@@ -45,12 +45,12 @@ export default function EmailGate({ onSubmit, isOpen, onClose }: EmailGateProps)
           ×
         </button>
 
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <h2 className="text-3xl md:text-4xl font-bold text-primary-purple mb-3">
             Get Your Personalized Report
           </h2>
           <p className="text-lg text-navy">
-            See your full breakdown, plus get access to tools that help you build your actual dream life.
+            While you're waiting on your windfall, let's help you reach your Dream Life.
           </p>
         </div>
 
@@ -78,10 +78,6 @@ export default function EmailGate({ onSubmit, isOpen, onClose }: EmailGateProps)
           >
             {isSubmitting ? 'Sending...' : 'Send Me My Report'}
           </button>
-
-          <p className="text-xs text-navy/60 text-center">
-            Plus get access to Dream Life Calculator, No Spend Journal, and Community
-          </p>
         </form>
 
         <div className="mt-8 pt-6 border-t border-light-blush">
@@ -89,19 +85,11 @@ export default function EmailGate({ onSubmit, isOpen, onClose }: EmailGateProps)
           <ul className="space-y-2 text-sm text-navy/80">
             <li className="flex items-start">
               <span className="text-primary-purple mr-2">✓</span>
-              <span>Your complete lottery breakdown as a PDF</span>
+              <span>Your complete lottery breakdown (save as PDF from print dialog)</span>
             </li>
             <li className="flex items-start">
               <span className="text-primary-purple mr-2">✓</span>
               <span>Dream Life Calculator to plan your actual goals</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-primary-purple mr-2">✓</span>
-              <span>No Spend Journal to track your progress</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-primary-purple mr-2">✓</span>
-              <span>Access to our supportive community</span>
             </li>
           </ul>
         </div>

@@ -55,6 +55,7 @@ export const DEFAULT_DEBTS = [
   { id: 'mortgage', label: 'Mortgage', amount: 450000, enabled: true },
   { id: 'credit-cards', label: 'Credit Cards', amount: 35000, enabled: true },
   { id: 'student-loans', label: 'Student Loans', amount: 85000, enabled: true },
+  { id: 'personal-loans', label: 'Personal Loans', amount: 25000, enabled: true },
   { id: 'car-loan', label: 'Car Loan', amount: 42000, enabled: true },
   { id: 'medical-bills', label: 'Medical Bills', amount: 18500, enabled: true },
   { id: 'family-support', label: 'Parent/Family Support', amount: 50000, enabled: true },
@@ -69,11 +70,14 @@ export const DEFAULT_DOMICILES = [
   { id: 'investment-property', label: 'Investment Property', amount: 800000, why: 'Building wealth through real estate', enabled: false },
 ]
 
-// Travel & Toys - Vehicles, trips, experiences
+// Travel / Epic Experiences - Vehicles, trips, luxury items
 export const DEFAULT_TRAVEL_TOYS = [
   { id: 'dream-car', label: 'Dream Car', amount: 250000, why: 'Drive in style', enabled: true },
   { id: 'travel-fund', label: 'Travel Fund', amount: 500000, why: 'See the world', enabled: true },
-  { id: 'boat-rv', label: 'Boat / RV', amount: 350000, why: 'Adventure awaits', enabled: false },
+  { id: 'private-jet', label: 'Private Jet', amount: 5000000, why: 'Travel in ultimate style', enabled: false },
+  { id: 'boat-yacht', label: 'Boat / Yacht', amount: 2000000, why: 'Life on the water', enabled: false },
+  { id: 'rocket-space', label: 'Space Travel / Rocket', amount: 500000, why: 'To infinity and beyond', enabled: false },
+  { id: 'jewelry', label: 'Jewelry & Watches', amount: 500000, why: 'Timeless luxury', enabled: false },
   { id: 'experiences', label: 'Epic Experiences', amount: 200000, why: 'Making memories', enabled: true },
 ]
 
@@ -82,12 +86,13 @@ export const DEFAULT_SHARE_WEALTH = [
   { id: 'family-gifts', label: 'Family Gifts', amount: 500000, why: 'Take care of the people I love', enabled: true },
   { id: 'friends-gifts', label: 'Friends', amount: 100000, why: 'Pay it forward', enabled: false },
   { id: 'charity', label: 'Charity / Causes', amount: 500000, why: 'Give back to my community', enabled: true },
-  { id: 'education-fund', label: 'Education Fund (kids/family)', amount: 300000, why: 'Invest in their future', enabled: true },
+  { id: 'education-fund', label: 'Education Fund (Self, Others)', amount: 300000, why: 'Invest in the future', enabled: true },
 ]
 
 // Annual lifestyle expenses (Your New Normal)
 export const DEFAULT_ANNUAL_EXPENSES = [
   { id: 'housing', label: 'Housing (utilities, maintenance, property tax)', amount: 60000, enabled: true },
+  { id: 'insurance', label: 'Insurance (home, auto, umbrella, life)', amount: 25000, enabled: true },
   { id: 'travel', label: 'Travel Budget', amount: 50000, enabled: true },
   { id: 'charity', label: 'Annual Giving', amount: 25000, enabled: true },
   { id: 'entertainment', label: 'Fun & Entertainment', amount: 30000, enabled: true },
@@ -123,8 +128,11 @@ export const PRESETS = {
     travelToys: [
       { id: 'dream-car', amount: 350000, enabled: true },
       { id: 'travel-fund', amount: 750000, enabled: true },
-      { id: 'boat-rv', amount: 500000, enabled: true },
-      { id: 'experiences', amount: 300000, enabled: true },
+      { id: 'private-jet', amount: 10000000, enabled: true },
+      { id: 'boat-yacht', amount: 3000000, enabled: true },
+      { id: 'rocket-space', amount: 500000, enabled: false },
+      { id: 'jewelry', amount: 1000000, enabled: true },
+      { id: 'experiences', amount: 500000, enabled: true },
     ],
     shareWealth: [
       { id: 'family-gifts', amount: 2000000, enabled: true },
@@ -134,6 +142,7 @@ export const PRESETS = {
     ],
     annualExpenses: [
       { id: 'housing', amount: 120000, enabled: true },
+      { id: 'insurance', amount: 75000, enabled: true },
       { id: 'travel', amount: 100000, enabled: true },
       { id: 'charity', amount: 50000, enabled: true },
       { id: 'entertainment', amount: 75000, enabled: true },
@@ -154,7 +163,10 @@ export const PRESETS = {
     travelToys: [
       { id: 'dream-car', amount: 75000, enabled: true },
       { id: 'travel-fund', amount: 200000, enabled: true },
-      { id: 'boat-rv', amount: 0, enabled: false },
+      { id: 'private-jet', amount: 0, enabled: false },
+      { id: 'boat-yacht', amount: 0, enabled: false },
+      { id: 'rocket-space', amount: 0, enabled: false },
+      { id: 'jewelry', amount: 50000, enabled: false },
       { id: 'experiences', amount: 100000, enabled: true },
     ],
     shareWealth: [
@@ -165,6 +177,7 @@ export const PRESETS = {
     ],
     annualExpenses: [
       { id: 'housing', amount: 36000, enabled: true },
+      { id: 'insurance', amount: 15000, enabled: true },
       { id: 'travel', amount: 25000, enabled: true },
       { id: 'charity', amount: 15000, enabled: true },
       { id: 'entertainment', amount: 20000, enabled: true },
