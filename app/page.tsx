@@ -187,7 +187,7 @@ export default function Home() {
       }
 
       setShowEmailGate(false)
-      alert('Your report is ready! Use "Save as PDF" in the print dialog to download it.')
+      alert('You\'re all set! Save your report as PDF, and check your inbox for more resources.')
     } catch (error) {
       throw error
     }
