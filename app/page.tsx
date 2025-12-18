@@ -173,19 +173,21 @@ export default function Home() {
       })
 
       if (pdfResponse.ok) {
-        const blob = await pdfResponse.blob()
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = 'lottery-reality-check.pdf'
-        document.body.appendChild(a)
-        a.click()
-        window.URL.revokeObjectURL(url)
-        document.body.removeChild(a)
+        const html = await pdfResponse.text()
+        // Open in new window and trigger print dialog for PDF save
+        const printWindow = window.open('', '_blank')
+        if (printWindow) {
+          printWindow.document.write(html)
+          printWindow.document.close()
+          // Give the content time to render, then trigger print
+          setTimeout(() => {
+            printWindow.print()
+          }, 250)
+        }
       }
 
       setShowEmailGate(false)
-      alert('Check your email! Your personalized report is on its way.')
+      alert('Your report is ready! Use "Save as PDF" in the print dialog to download it.')
     } catch (error) {
       throw error
     }
