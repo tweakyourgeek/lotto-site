@@ -3,10 +3,10 @@ export const STATE_TAX_RATES: Record<string, number> = {
   'Alaska': 0,
   'Arizona': 4.8,
   'Arkansas': 5.5,
-  'California': 13.3,
+  'California': 0, // CA exempts lottery winnings from state tax
   'Colorado': 4.55,
   'Connecticut': 6.99,
-  'Delaware': 6.6,
+  'Delaware': 0, // DE exempts lottery winnings from state tax
   'Florida': 0,
   'Georgia': 5.75,
   'Hawaii': 11.0,
