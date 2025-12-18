@@ -222,7 +222,7 @@ export function generatePDFHTML(data: PDFData): string {
       <li><strong>Community Access:</strong> Connect with others on the same journey</li>
     </ul>
     <p style="text-align: center; margin-top: 20px;">
-      <a href="https://tweakyourgeek.com" style="color: #7A5980; font-weight: 600;">Visit Tweak Your Geek →</a>
+      <a href="https://tweakyourgeek.net" style="color: #7A5980; font-weight: 600;">Visit Tweak Your Geek →</a>
     </p>
   </div>
 
@@ -232,7 +232,7 @@ export function generatePDFHTML(data: PDFData): string {
     <p>Tax calculations based on current federal rates and state averages. Investment projections assume compound annual growth.
     Always consult with financial and tax professionals for personalized advice.</p>
     <p style="margin-top: 20px;">Data based on <a href="https://www.usamega.com/powerball/jackpot" style="color: #7A5980;">usamega.com</a> (established 1999)</p>
-    <p style="margin-top: 20px;">Created by <a href="https://tweakyourgeek.com" style="color: #7A5980;">Tweak Your Geek</a></p>
+    <p style="margin-top: 20px;">Created by <a href="https://tweakyourgeek.net" style="color: #7A5980;">Tweak Your Geek</a></p>
   </div>
 </body>
 </html>

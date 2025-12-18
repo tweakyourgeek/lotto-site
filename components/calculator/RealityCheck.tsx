@@ -17,7 +17,7 @@ export default function RealityCheck() {
             Let's help you reach your Dream Life, one step at a time.
           </p>
           <a
-            href="https://tweakyourgeek.com"
+            href="https://tweakyourgeek.net"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-6 py-3 bg-primary-purple text-white rounded-lg hover:bg-light-lavender transition-colors font-semibold"
