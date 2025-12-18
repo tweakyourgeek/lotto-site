@@ -4,42 +4,67 @@ export default function RealityCheck() {
   return (
     <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
       <h2 className="text-2xl md:text-3xl font-bold text-primary-purple mb-6 text-center">
-        Reality Check
+        Dream Big, Plan Smart
       </h2>
 
       <div className="space-y-6 max-w-3xl mx-auto">
-        <div className="bg-light-blush rounded-xl p-6">
-          <h3 className="font-semibold text-navy mb-2 text-lg">What this does:</h3>
-          <p className="text-navy/80">
-            Shows what YOU value when money isn't the constraint. It's a mirror for your priorities, not a financial plan.
+        {/* CTA Section */}
+        <div className="bg-gradient-to-r from-primary-purple/10 to-light-lavender/20 rounded-xl p-6 text-center">
+          <p className="text-xl text-navy font-semibold mb-3">
+            While you're waiting on your windfall...
           </p>
+          <p className="text-navy/80 mb-4">
+            Let's help you reach your Dream Life, one step at a time.
+          </p>
+          <a
+            href="https://tweakyourgeek.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-6 py-3 bg-primary-purple text-white rounded-lg hover:bg-light-lavender transition-colors font-semibold"
+          >
+            Start Your Journey
+          </a>
         </div>
 
+        {/* Movie References */}
         <div className="bg-light-blush rounded-xl p-6">
-          <h3 className="font-semibold text-navy mb-2 text-lg">What it doesn't:</h3>
-          <ul className="space-y-2 text-navy/80">
-            <li className="flex items-start">
-              <span className="text-primary-purple mr-2">•</span>
-              <span>Replace professional tax advice (talk to a CPA)</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-primary-purple mr-2">•</span>
-              <span>Guarantee exact amounts (state laws and situations vary)</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-primary-purple mr-2">•</span>
-              <span>Make you win the lottery (but we can dream!)</span>
-            </li>
-          </ul>
+          <h3 className="font-semibold text-navy mb-4 text-lg text-center">
+            Inspired By True Stories & Great Films
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a
+              href="https://www.imdb.com/title/tt13925890/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow"
+            >
+              <span className="text-2xl">🎰</span>
+              <div>
+                <p className="font-semibold text-navy">Jerry & Marge Go Large</p>
+                <p className="text-sm text-navy/60">A true story of beating the system</p>
+              </div>
+            </a>
+            <a
+              href="https://www.imdb.com/title/tt0088850/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow"
+            >
+              <span className="text-2xl">💰</span>
+              <div>
+                <p className="font-semibold text-navy">Brewster's Millions</p>
+                <p className="text-sm text-navy/60">The original "spend it all" challenge</p>
+              </div>
+            </a>
+          </div>
         </div>
 
-        <div className="text-center pt-6">
-          <p className="text-sm text-navy/60">
-            Tax calculations based on current federal rates and state averages.
-            <br />
-            Investment projections assume compound annual growth with no withdrawals.
-            <br />
-            Always consult with financial and tax professionals for personalized advice.
+        {/* Disclaimer - simplified */}
+        <div className="text-center pt-4">
+          <p className="text-xs text-navy/50">
+            Tax calculations are estimates based on current federal rates and state averages.
+            Investment projections assume compound annual growth. This is for entertainment
+            and planning purposes only - always consult professionals for financial advice.
           </p>
         </div>
       </div>

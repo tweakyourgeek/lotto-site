@@ -1,6 +1,8 @@
 import type { Debt } from '@/components/calculator/DebtSection'
 import type { LifestyleItem } from '@/components/calculator/LifestyleSection'
 import type { AnnualExpense } from '@/components/calculator/AnnualExpenses'
+import type { SpendingItem } from '@/components/calculator/SpendingSection'
+import type { PresetType } from '@/lib/constants'
 
 export interface WizardData {
   currentStep: number
@@ -9,11 +11,16 @@ export interface WizardData {
   state: string
   payoutType: 'lump-sum' | 'annuity'
   filingStatus: string
+  selectedPreset: PresetType
   debts: Debt[]
-  lifestyleItems: LifestyleItem[]
+  domiciles: SpendingItem[]
+  travelToys: SpendingItem[]
+  shareWealth: SpendingItem[]
   annualExpenses: AnnualExpense[]
   investmentAmount: number
   annualReturn: number
+  // Legacy support
+  lifestyleItems?: LifestyleItem[]
 }
 
 const STORAGE_KEY = 'lottery-wizard-data'
