@@ -13,6 +13,9 @@ interface JackpotInputProps {
   filingStatus: string
   onFilingStatusChange: (value: string) => void
   netTakeHome: number
+  lumpSum?: number
+  federalTax?: number
+  stateTax?: number
 }
 
 export default function JackpotInput({
@@ -25,6 +28,9 @@ export default function JackpotInput({
   filingStatus,
   onFilingStatusChange,
   netTakeHome,
+  lumpSum,
+  federalTax,
+  stateTax,
 }: JackpotInputProps) {
   const handleJackpotInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '')
@@ -38,7 +44,7 @@ export default function JackpotInput({
           Your Billion Dollar Blueprint
         </h1>
         <p className="text-lg md:text-xl text-navy">
-          What would YOU do with a billion dollars?
+          What would YOU do if you won the LOTTO?
         </p>
       </div>
 
@@ -117,6 +123,26 @@ export default function JackpotInput({
             {formatCurrency(netTakeHome)}
           </div>
         </div>
+
+        {lumpSum && federalTax !== undefined && stateTax !== undefined && (
+          <div className="mt-6 p-4 bg-light-blush/30 rounded-xl">
+            <p className="text-xs font-semibold text-navy/70 mb-3 text-center">Where the money went:</p>
+            <div className="grid grid-cols-3 gap-3 text-center text-xs">
+              <div>
+                <p className="text-navy/60 mb-1">{payoutType === 'lump-sum' ? 'Cash Option' : 'Full Jackpot'}</p>
+                <p className="font-bold text-primary-purple">{formatCurrency(lumpSum)}</p>
+              </div>
+              <div>
+                <p className="text-navy/60 mb-1">Federal Tax (37%)</p>
+                <p className="font-bold text-dusty-rose">-{formatCurrency(federalTax)}</p>
+              </div>
+              <div>
+                <p className="text-navy/60 mb-1">{state} Tax ({STATE_TAX_RATES[state] || 0}%)</p>
+                <p className="font-bold text-dusty-rose">-{formatCurrency(stateTax)}</p>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>
