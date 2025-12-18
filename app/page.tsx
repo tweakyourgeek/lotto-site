@@ -597,7 +597,7 @@ export default function Home() {
           <p className="mb-2">
             Built with <span className="text-primary-purple">❤️</span> by{' '}
             <a
-              href="https://tweakyourgeek.com"
+              href="https://tweakyourgeek.net"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary-purple hover:underline"
