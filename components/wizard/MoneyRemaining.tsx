@@ -22,9 +22,6 @@ export default function MoneyRemaining({
   const [showMilestoneMessage, setShowMilestoneMessage] = useState<string | null>(null)
   const confettiFired = useRef<Set<number>>(new Set())
 
-  // Don't show on step 1 (before they've allocated anything)
-  if (currentStep === 1) return null
-
   const allocated = debtsCleared + lifestyleDreams + invested
   const remaining = netTakeHome - allocated
   const percentUsed = Math.min((allocated / netTakeHome) * 100, 100)
@@ -38,8 +35,11 @@ export default function MoneyRemaining({
     return acc
   }, SPENDING_MILESTONES[0])
 
-  // Fire confetti on milestone achievements
+  // Fire confetti on milestone achievements - must be called before any early returns!
   useEffect(() => {
+    // Skip if on step 1
+    if (currentStep === 1) return
+
     const checkMilestones = async () => {
       for (const milestone of SPENDING_MILESTONES) {
         if (percentUsed >= milestone.percent && !confettiFired.current.has(milestone.percent)) {
@@ -69,7 +69,10 @@ export default function MoneyRemaining({
     }
 
     checkMilestones()
-  }, [percentUsed])
+  }, [percentUsed, currentStep])
+
+  // Don't show on step 1 (before they've allocated anything) - AFTER all hooks!
+  if (currentStep === 1) return null
 
   return (
     <div className="mb-4 bg-gradient-to-r from-primary-purple to-light-lavender rounded-lg p-4 text-white shadow-md relative overflow-hidden">
