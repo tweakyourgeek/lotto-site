@@ -571,16 +571,7 @@ export default function Home() {
 
               <DreamLifeCost annualExpenses={totalAnnualExpenses} />
 
-              <RealityCheck />
-
-              <div className="text-center">
-                <button
-                  onClick={() => setShowEmailGate(true)}
-                  className="px-8 py-4 bg-gradient-to-r from-primary-purple to-light-lavender text-white font-semibold rounded-lg hover:shadow-xl transition-all text-lg"
-                >
-                  Get My Personalized Report
-                </button>
-              </div>
+              <RealityCheck onGetReport={() => setShowEmailGate(true)} />
 
               <WizardNavigation
                 currentStep={currentStep}

@@ -1,6 +1,10 @@
 'use client'
 
-export default function RealityCheck() {
+interface RealityCheckProps {
+  onGetReport?: () => void
+}
+
+export default function RealityCheck({ onGetReport }: RealityCheckProps) {
   return (
     <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
       <h2 className="text-2xl md:text-3xl font-bold text-primary-purple mb-6 text-center">
@@ -16,14 +20,12 @@ export default function RealityCheck() {
           <p className="text-navy/80 mb-4">
             Let's help you reach your Dream Life, one step at a time.
           </p>
-          <a
-            href="https://tweakyourgeek.net"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={onGetReport}
             className="inline-block px-6 py-3 bg-primary-purple text-white rounded-lg hover:bg-light-lavender transition-colors font-semibold"
           >
-            Start Your Journey
-          </a>
+            Get Your Personalized Report
+          </button>
         </div>
 
         {/* Movie References */}
