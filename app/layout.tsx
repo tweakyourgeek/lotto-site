@@ -13,8 +13,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Check if Clerk is configured
+  const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+
+  // If no Clerk key, render without ClerkProvider
+  if (!clerkPubKey) {
+    return (
+      <html lang="en">
+        <body className="font-sans">{children}</body>
+      </html>
+    )
+  }
+
   return (
-    <ClerkProvider>
+    <ClerkProvider publishableKey={clerkPubKey}>
       <html lang="en">
         <body className="font-sans">{children}</body>
       </html>
