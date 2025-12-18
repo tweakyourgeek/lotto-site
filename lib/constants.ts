@@ -59,6 +59,7 @@ export const DEFAULT_DEBTS = [
   { id: 'medical-bills', label: 'Medical Bills', amount: 18500, enabled: true },
   { id: 'family-support', label: 'Parent/Family Support', amount: 50000, enabled: true },
   { id: 'business-loan', label: 'Business Loan', amount: 125000, enabled: true },
+  { id: 'other', label: 'Other/Miscellaneous', amount: 0, enabled: false },
 ]
 
 // Domiciles - Dream homes and properties

@@ -19,7 +19,6 @@ export default function MoneyRemaining({
   invested,
   currentStep,
 }: MoneyRemainingProps) {
-  const [lastMilestone, setLastMilestone] = useState(0)
   const [showMilestoneMessage, setShowMilestoneMessage] = useState<string | null>(null)
   const confettiFired = useRef<Set<number>>(new Set())
 
@@ -73,32 +72,32 @@ export default function MoneyRemaining({
   }, [percentUsed])
 
   return (
-    <div className="mb-8 bg-gradient-to-r from-primary-purple to-light-lavender rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
+    <div className="mb-4 bg-gradient-to-r from-primary-purple to-light-lavender rounded-lg p-4 text-white shadow-md relative overflow-hidden">
       {/* Milestone notification */}
       {showMilestoneMessage && (
-        <div className="absolute top-0 left-0 right-0 bg-white/20 py-2 text-center animate-pulse">
-          <span className="text-lg font-bold">{currentMilestone?.emoji} {showMilestoneMessage}</span>
+        <div className="absolute top-0 left-0 right-0 bg-white/20 py-1 text-center animate-pulse">
+          <span className="text-sm font-bold">{currentMilestone?.emoji} {showMilestoneMessage}</span>
         </div>
       )}
 
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-2">
         <div>
-          <p className="text-sm opacity-90">Your Windfall</p>
-          <p className="text-2xl font-bold">{formatCurrency(netTakeHome)}</p>
+          <p className="text-xs opacity-90">Your Windfall</p>
+          <p className="text-lg font-bold">{formatCurrency(netTakeHome)}</p>
         </div>
         <div className="text-right">
-          <p className="text-sm opacity-90">
+          <p className="text-xs opacity-90">
             {isOverspent ? 'Over Budget' : isFullyAllocated ? 'Fully Allocated!' : 'Remaining'}
           </p>
-          <p className={`text-2xl font-bold ${isOverspent ? 'text-red-200' : isFullyAllocated ? 'text-green-200' : ''}`}>
+          <p className={`text-lg font-bold ${isOverspent ? 'text-red-200' : isFullyAllocated ? 'text-green-200' : ''}`}>
             {isOverspent ? '-' : ''}{formatCurrency(Math.abs(remaining))}
           </p>
         </div>
       </div>
 
       {/* Progress bar with milestone markers */}
-      <div className="mb-3 relative">
-        <div className="h-4 bg-white/20 rounded-full overflow-hidden">
+      <div className="mb-2 relative">
+        <div className="h-3 bg-white/20 rounded-full overflow-hidden">
           <div
             className={`h-full transition-all duration-500 ${
               isOverspent
@@ -111,7 +110,7 @@ export default function MoneyRemaining({
           />
         </div>
         {/* Milestone markers */}
-        <div className="absolute top-0 left-0 right-0 h-4 flex items-center">
+        <div className="absolute top-0 left-0 right-0 h-3 flex items-center">
           {SPENDING_MILESTONES.slice(0, -1).map((milestone) => (
             <div
               key={milestone.percent}
@@ -120,7 +119,7 @@ export default function MoneyRemaining({
             >
               <span
                 className={`text-xs transition-all ${
-                  percentUsed >= milestone.percent ? 'opacity-100 scale-125' : 'opacity-50'
+                  percentUsed >= milestone.percent ? 'opacity-100 scale-110' : 'opacity-40'
                 }`}
               >
                 {milestone.emoji}
@@ -131,17 +130,15 @@ export default function MoneyRemaining({
       </div>
 
       {/* Percentage and milestone indicator */}
-      <div className="flex justify-between items-center mb-3">
-        <span className="text-sm opacity-75">{Math.round(percentUsed)}% allocated</span>
+      <div className="flex justify-between items-center mb-2 text-xs">
+        <span className="opacity-75">{Math.round(percentUsed)}% allocated</span>
         {currentMilestone && percentUsed >= currentMilestone.percent && (
-          <span className="text-sm">
-            {currentMilestone.emoji} {currentMilestone.message}
-          </span>
+          <span>{currentMilestone.emoji} {currentMilestone.message}</span>
         )}
       </div>
 
       {/* Breakdown */}
-      <div className="grid grid-cols-3 gap-4 text-sm">
+      <div className="grid grid-cols-3 gap-2 text-xs">
         {currentStep >= 2 && debtsCleared > 0 && (
           <div>
             <p className="opacity-75">Debts Cleared</p>
@@ -163,12 +160,12 @@ export default function MoneyRemaining({
       </div>
 
       {isOverspent && (
-        <p className="text-xs mt-3 opacity-90 italic">
+        <p className="text-xs mt-2 opacity-90 italic">
           You're dreaming bigger than the jackpot! Consider adjusting your allocations.
         </p>
       )}
       {isFullyAllocated && !isOverspent && (
-        <p className="text-xs mt-3 opacity-90 italic">
+        <p className="text-xs mt-2 opacity-90 italic">
           🎊 You spent it ALL! Legend.
         </p>
       )}
