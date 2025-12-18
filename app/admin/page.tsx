@@ -1,31 +1,23 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { UserButton, useAuth } from '@clerk/nextjs'
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { formatCurrency, formatNumber } from '@/lib/calculations'
 
 const COLORS = ['#7A5980', '#BC7C9C', '#C68A98', '#B375A0', '#ECD7D5']
 
-export default function AdminDashboard() {
+function AdminContent() {
   const [analytics, setAnalytics] = useState<any>(null)
   const [debts, setDebts] = useState<any[]>([])
   const [lifestyle, setLifestyle] = useState<any[]>([])
   const [states, setStates] = useState<any[]>([])
   const [dailyStats, setDailyStats] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [password, setPassword] = useState('')
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Simple password protection - replace with proper auth in production
-    if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD || password === 'admin123') {
-      setIsAuthenticated(true)
-      loadAnalytics()
-    } else {
-      alert('Invalid password')
-    }
-  }
+  useEffect(() => {
+    loadAnalytics()
+  }, [])
 
   const loadAnalytics = async () => {
     try {
@@ -49,39 +41,6 @@ export default function AdminDashboard() {
     }
   }
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-light-blush">
-        <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full">
-          <h1 className="text-3xl font-bold text-primary-purple mb-6 text-center">
-            Admin Dashboard
-          </h1>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-navy mb-2">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border-2 border-dusty-rose rounded-lg focus:outline-none focus:ring-2 focus:ring-light-lavender"
-                placeholder="Enter admin password"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-primary-purple text-white font-semibold py-3 rounded-lg hover:bg-light-lavender transition-colors"
-            >
-              Login
-            </button>
-          </form>
-        </div>
-      </div>
-    )
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-light-blush">
@@ -103,12 +62,14 @@ export default function AdminDashboard() {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-primary-purple">Analytics Dashboard</h1>
-          <button
-            onClick={() => setIsAuthenticated(false)}
-            className="px-4 py-2 bg-navy text-white rounded-lg hover:bg-primary-purple transition-colors"
-          >
-            Logout
-          </button>
+          <UserButton
+            afterSignOutUrl="/"
+            appearance={{
+              elements: {
+                avatarBox: "w-10 h-10"
+              }
+            }}
+          />
         </div>
 
         {/* Summary Cards */}
@@ -251,4 +212,39 @@ export default function AdminDashboard() {
       </div>
     </div>
   )
+}
+
+export default function AdminDashboard() {
+  const hasClerkKeys = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+
+  // If Clerk isn't configured, show setup instructions
+  if (!hasClerkKeys) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-light-blush">
+        <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
+          <h1 className="text-3xl font-bold text-primary-purple mb-4">
+            Authentication Required
+          </h1>
+          <p className="text-navy mb-6">
+            Clerk authentication is not configured. Add your Clerk keys to Vercel to enable secure admin access.
+          </p>
+          <div className="text-left bg-light-blush p-4 rounded-lg text-sm">
+            <p className="font-semibold mb-2">Required environment variables:</p>
+            <code className="block text-xs">NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY</code>
+            <code className="block text-xs">CLERK_SECRET_KEY</code>
+          </div>
+          <a
+            href="https://dashboard.clerk.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-6 px-6 py-3 bg-primary-purple text-white rounded-lg hover:bg-light-lavender transition-colors"
+          >
+            Get Clerk Keys
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  return <AdminContent />
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -12,6 +13,19 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Only wrap with ClerkProvider if keys are configured
+  const hasClerkKeys = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+
+  if (hasClerkKeys) {
+    return (
+      <ClerkProvider>
+        <html lang="en">
+          <body className="font-sans">{children}</body>
+        </html>
+      </ClerkProvider>
+    )
+  }
+
   return (
     <html lang="en">
       <body className="font-sans">{children}</body>
