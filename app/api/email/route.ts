@@ -1,6 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { captureEmail } from '@/lib/db'
 
+interface MailerliteSubscriber {
+  email: string
+  fields?: Record<string, string | number>
+  groups?: string[]
+}
+
+async function addToMailerlite(subscriber: MailerliteSubscriber): Promise<boolean> {
+  const apiKey = process.env.MAILERLITE_API_KEY
+
+  if (!apiKey) {
+    console.warn('MAILERLITE_API_KEY not configured')
+    return false
+  }
+
+  try {
+    const response = await fetch('https://connect.mailerlite.com/api/subscribers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        email: subscriber.email,
+        fields: subscriber.fields,
+        groups: subscriber.groups,
+      }),
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('Mailerlite error:', error)
+      return false
+    }
+
+    console.log('Subscriber added to Mailerlite:', subscriber.email)
+    return true
+  } catch (error) {
+    console.error('Mailerlite API error:', error)
+    return false
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { email, data } = await request.json()
@@ -12,33 +55,24 @@ export async function POST(request: NextRequest) {
     // Get session ID from cookie
     const sessionId = request.cookies.get('session_id')?.value
 
-    // Track email capture (only if database is configured)
+    // Track email capture in database (if configured)
     if (process.env.DATABASE_URL && sessionId) {
       await captureEmail(sessionId, email)
     }
 
-    // TODO: Send email via SendGrid/Mailchimp
-    // For now, we'll just log it and return success
-    // You'll integrate your email provider here
+    // Add subscriber to Mailerlite
+    const groupId = process.env.MAILERLITE_GROUP_ID
 
-    /*
-    Example SendGrid integration:
-
-    const sgMail = require('@sendgrid/mail')
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-
-    const msg = {
-      to: email,
-      from: 'hello@tweakyourgeek.com',
-      subject: 'Your Lottery Reality Check Report',
-      text: 'Here is your personalized lottery reality check report...',
-      html: generateEmailHTML(data),
-    }
-
-    await sgMail.send(msg)
-    */
-
-    console.log('Email capture:', email)
+    await addToMailerlite({
+      email,
+      fields: {
+        // Custom fields you can set up in Mailerlite
+        lottery_jackpot: data?.jackpot || 0,
+        lottery_net: data?.netTakeHome || 0,
+        lottery_state: data?.state || '',
+      },
+      groups: groupId ? [groupId] : undefined,
+    })
 
     return NextResponse.json({ success: true })
   } catch (error) {
