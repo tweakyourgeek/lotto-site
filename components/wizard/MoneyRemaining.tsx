@@ -1,6 +1,8 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import { formatCurrency } from '@/lib/calculations'
+import { SPENDING_MILESTONES } from '@/lib/constants'
 
 interface MoneyRemainingProps {
   netTakeHome: number
@@ -17,18 +19,67 @@ export default function MoneyRemaining({
   invested,
   currentStep,
 }: MoneyRemainingProps) {
+  const [showMilestoneMessage, setShowMilestoneMessage] = useState<string | null>(null)
+  const confettiFired = useRef<Set<number>>(new Set())
+
   // Don't show on step 1 (before they've allocated anything)
   if (currentStep === 1) return null
 
   const allocated = debtsCleared + lifestyleDreams + invested
   const remaining = netTakeHome - allocated
-  const percentUsed = (allocated / netTakeHome) * 100
+  const percentUsed = Math.min((allocated / netTakeHome) * 100, 100)
 
   const isOverspent = remaining < 0
-  const isFullyAllocated = Math.abs(remaining) < 1000 // Within $1k = "perfect"
+  const isFullyAllocated = percentUsed >= 99
+
+  // Find current milestone
+  const currentMilestone = SPENDING_MILESTONES.reduce((acc, milestone) => {
+    if (percentUsed >= milestone.percent) return milestone
+    return acc
+  }, SPENDING_MILESTONES[0])
+
+  // Fire confetti on milestone achievements
+  useEffect(() => {
+    const checkMilestones = async () => {
+      for (const milestone of SPENDING_MILESTONES) {
+        if (percentUsed >= milestone.percent && !confettiFired.current.has(milestone.percent)) {
+          confettiFired.current.add(milestone.percent)
+
+          // Show milestone message
+          setShowMilestoneMessage(milestone.message)
+          setTimeout(() => setShowMilestoneMessage(null), 3000)
+
+          // Fire confetti at 100%
+          if (milestone.percent === 100) {
+            try {
+              const confetti = (await import('canvas-confetti')).default
+              confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#7A5980', '#BC7C9C', '#B375A0', '#ECD7D5', '#D8BFD8'],
+              })
+            } catch (e) {
+              console.log('Confetti not available')
+            }
+          }
+          break
+        }
+      }
+    }
+
+    checkMilestones()
+  }, [percentUsed])
 
   return (
-    <div className="mb-4 bg-gradient-to-r from-primary-purple to-light-lavender rounded-lg p-4 text-white shadow-md">
+    <div className="mb-4 bg-gradient-to-r from-primary-purple to-light-lavender rounded-lg p-4 text-white shadow-md relative overflow-hidden">
+      {/* Milestone notification */}
+      {showMilestoneMessage && (
+        <div className="absolute top-0 left-0 right-0 bg-white/20 py-1 text-center animate-pulse">
+          <span className="text-sm font-bold">{currentMilestone?.emoji} {showMilestoneMessage}</span>
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-2">
         <div>
           <p className="text-xs opacity-90">Your Windfall</p>
@@ -44,9 +95,9 @@ export default function MoneyRemaining({
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="mb-2">
-        <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+      {/* Progress bar with milestone markers */}
+      <div className="mb-2 relative">
+        <div className="h-3 bg-white/20 rounded-full overflow-hidden">
           <div
             className={`h-full transition-all duration-500 ${
               isOverspent
@@ -58,6 +109,32 @@ export default function MoneyRemaining({
             style={{ width: `${Math.min(percentUsed, 100)}%` }}
           />
         </div>
+        {/* Milestone markers */}
+        <div className="absolute top-0 left-0 right-0 h-3 flex items-center">
+          {SPENDING_MILESTONES.slice(0, -1).map((milestone) => (
+            <div
+              key={milestone.percent}
+              className="absolute transform -translate-x-1/2"
+              style={{ left: `${milestone.percent}%` }}
+            >
+              <span
+                className={`text-xs transition-all ${
+                  percentUsed >= milestone.percent ? 'opacity-100 scale-110' : 'opacity-40'
+                }`}
+              >
+                {milestone.emoji}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Percentage and milestone indicator */}
+      <div className="flex justify-between items-center mb-2 text-xs">
+        <span className="opacity-75">{Math.round(percentUsed)}% allocated</span>
+        {currentMilestone && percentUsed >= currentMilestone.percent && (
+          <span>{currentMilestone.emoji} {currentMilestone.message}</span>
+        )}
       </div>
 
       {/* Breakdown */}
@@ -70,11 +147,11 @@ export default function MoneyRemaining({
         )}
         {currentStep >= 3 && lifestyleDreams > 0 && (
           <div>
-            <p className="opacity-75">Lifestyle</p>
+            <p className="opacity-75">Dreams & Giving</p>
             <p className="font-semibold">{formatCurrency(lifestyleDreams)}</p>
           </div>
         )}
-        {currentStep >= 4 && invested > 0 && (
+        {currentStep >= 7 && invested > 0 && (
           <div>
             <p className="opacity-75">Invested</p>
             <p className="font-semibold">{formatCurrency(invested)}</p>
@@ -84,12 +161,12 @@ export default function MoneyRemaining({
 
       {isOverspent && (
         <p className="text-xs mt-2 opacity-90 italic">
-          You're dreaming big! Consider adjusting your allocations.
+          You're dreaming bigger than the jackpot! Consider adjusting your allocations.
         </p>
       )}
-      {isFullyAllocated && (
+      {isFullyAllocated && !isOverspent && (
         <p className="text-xs mt-2 opacity-90 italic">
-          Perfect! You've allocated every dollar.
+          🎊 You spent it ALL! Legend.
         </p>
       )}
     </div>

@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from 'react'
 import JackpotInput from '@/components/calculator/JackpotInput'
 import DebtSection from '@/components/calculator/DebtSection'
-import LifestyleSection from '@/components/calculator/LifestyleSection'
+import SpendingSection from '@/components/calculator/SpendingSection'
+import PresetSelector from '@/components/calculator/PresetSelector'
 import AnnualExpenses from '@/components/calculator/AnnualExpenses'
 import InvestmentSection from '@/components/calculator/InvestmentSection'
 import SummaryDashboard from '@/components/charts/SummaryDashboard'
@@ -15,30 +16,43 @@ import WizardNavigation from '@/components/wizard/WizardNavigation'
 import MoneyRemaining from '@/components/wizard/MoneyRemaining'
 import StartOverButton from '@/components/wizard/StartOverButton'
 import { calculateNetTakeHome, calculateProjections } from '@/lib/calculations'
-import { DEFAULT_DEBTS, DEFAULT_LIFESTYLE, DEFAULT_ANNUAL_EXPENSES } from '@/lib/constants'
+import {
+  DEFAULT_DEBTS,
+  DEFAULT_DOMICILES,
+  DEFAULT_TRAVEL_TOYS,
+  DEFAULT_SHARE_WEALTH,
+  DEFAULT_ANNUAL_EXPENSES,
+  PRESETS,
+  PresetType,
+} from '@/lib/constants'
 import { saveWizardData, loadWizardData, clearWizardData } from '@/lib/storage'
 import type { Debt } from '@/components/calculator/DebtSection'
-import type { LifestyleItem } from '@/components/calculator/LifestyleSection'
+import type { SpendingItem } from '@/components/calculator/SpendingSection'
 import type { AnnualExpense } from '@/components/calculator/AnnualExpenses'
 
 const STEPS = [
   { number: 1, title: 'The Setup' },
   { number: 2, title: 'Clear the Deck' },
-  { number: 3, title: 'Fun + Dreams' },
-  { number: 4, title: 'Annual Lifestyle' },
-  { number: 5, title: 'The Future' },
-  { number: 6, title: 'Your Results' },
+  { number: 3, title: 'Domiciles' },
+  { number: 4, title: 'Travel & Toys' },
+  { number: 5, title: 'Share the Wealth' },
+  { number: 6, title: 'Your New Normal' },
+  { number: 7, title: 'The Future' },
+  { number: 8, title: 'Your Results' },
 ]
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(1)
   const [visitedSteps, setVisitedSteps] = useState<number[]>([1])
-  const [jackpot, setJackpot] = useState(1000000000)
+  const [jackpot, setJackpot] = useState(1500000000) // Start with current jackpot!
   const [state, setState] = useState('Washington')
   const [payoutType, setPayoutType] = useState<'lump-sum' | 'annuity'>('lump-sum')
   const [filingStatus, setFilingStatus] = useState('single')
+  const [selectedPreset, setSelectedPreset] = useState<PresetType>('custom')
   const [debts, setDebts] = useState<Debt[]>(DEFAULT_DEBTS)
-  const [lifestyleItems, setLifestyleItems] = useState<LifestyleItem[]>(DEFAULT_LIFESTYLE)
+  const [domiciles, setDomiciles] = useState<SpendingItem[]>(DEFAULT_DOMICILES)
+  const [travelToys, setTravelToys] = useState<SpendingItem[]>(DEFAULT_TRAVEL_TOYS)
+  const [shareWealth, setShareWealth] = useState<SpendingItem[]>(DEFAULT_SHARE_WEALTH)
   const [annualExpenses, setAnnualExpenses] = useState<AnnualExpense[]>(DEFAULT_ANNUAL_EXPENSES)
   const [investmentAmount, setInvestmentAmount] = useState(0)
   const [annualReturn, setAnnualReturn] = useState(7)
@@ -46,6 +60,59 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false)
 
   const containerRef = useRef<HTMLDivElement>(null)
+
+  // Apply preset values
+  const applyPreset = (preset: PresetType) => {
+    setSelectedPreset(preset)
+
+    if (preset === 'custom') return
+
+    const presetData = PRESETS[preset]
+
+    // Apply domiciles
+    setDomiciles(
+      DEFAULT_DOMICILES.map((item) => {
+        const presetItem = presetData.domiciles.find((p) => p.id === item.id)
+        return presetItem
+          ? { ...item, amount: presetItem.amount, enabled: presetItem.enabled }
+          : item
+      })
+    )
+
+    // Apply travel & toys
+    setTravelToys(
+      DEFAULT_TRAVEL_TOYS.map((item) => {
+        const presetItem = presetData.travelToys.find((p) => p.id === item.id)
+        return presetItem
+          ? { ...item, amount: presetItem.amount, enabled: presetItem.enabled }
+          : item
+      })
+    )
+
+    // Apply share the wealth
+    setShareWealth(
+      DEFAULT_SHARE_WEALTH.map((item) => {
+        const presetItem = presetData.shareWealth.find((p) => p.id === item.id)
+        return presetItem
+          ? { ...item, amount: presetItem.amount, enabled: presetItem.enabled }
+          : item
+      })
+    )
+
+    // Apply annual expenses
+    setAnnualExpenses(
+      DEFAULT_ANNUAL_EXPENSES.map((item) => {
+        const presetItem = presetData.annualExpenses.find((p) => p.id === item.id)
+        return presetItem
+          ? { ...item, amount: presetItem.amount, enabled: presetItem.enabled }
+          : item
+      })
+    )
+
+    // Apply investment percentage
+    const taxCalc = calculateNetTakeHome(jackpot, state, payoutType)
+    setInvestmentAmount(Math.floor(taxCalc.netTakeHome * presetData.investmentPercent))
+  }
 
   // Load saved data on mount
   useEffect(() => {
@@ -56,8 +123,11 @@ export default function Home() {
     if (saved.state) setState(saved.state)
     if (saved.payoutType) setPayoutType(saved.payoutType)
     if (saved.filingStatus) setFilingStatus(saved.filingStatus)
+    if (saved.selectedPreset) setSelectedPreset(saved.selectedPreset)
     if (saved.debts) setDebts(saved.debts)
-    if (saved.lifestyleItems) setLifestyleItems(saved.lifestyleItems)
+    if (saved.domiciles) setDomiciles(saved.domiciles)
+    if (saved.travelToys) setTravelToys(saved.travelToys)
+    if (saved.shareWealth) setShareWealth(saved.shareWealth)
     if (saved.annualExpenses) setAnnualExpenses(saved.annualExpenses)
     if (saved.investmentAmount) setInvestmentAmount(saved.investmentAmount)
     if (saved.annualReturn) setAnnualReturn(saved.annualReturn)
@@ -66,8 +136,14 @@ export default function Home() {
 
   const taxCalc = calculateNetTakeHome(jackpot, state, payoutType)
   const debtsCleared = debts.filter((d) => d.enabled).reduce((sum, d) => sum + d.amount, 0)
-  const lifestyleDreams = lifestyleItems.reduce((sum, item) => sum + item.amount, 0)
-  const totalAnnualExpenses = annualExpenses.reduce((sum, exp) => sum + exp.amount, 0)
+
+  // Calculate all lifestyle dreams (domiciles + travel/toys + sharing)
+  const domicilesTotal = domiciles.filter((d) => d.enabled).reduce((sum, d) => sum + d.amount, 0)
+  const travelToysTotal = travelToys.filter((d) => d.enabled).reduce((sum, d) => sum + d.amount, 0)
+  const shareWealthTotal = shareWealth.filter((d) => d.enabled).reduce((sum, d) => sum + d.amount, 0)
+  const lifestyleDreams = domicilesTotal + travelToysTotal + shareWealthTotal
+
+  const totalAnnualExpenses = annualExpenses.filter((e) => e.enabled).reduce((sum, exp) => sum + exp.amount, 0)
 
   // Auto-set investment to 50% of net take-home
   useEffect(() => {
@@ -89,13 +165,32 @@ export default function Home() {
       state,
       payoutType,
       filingStatus,
+      selectedPreset,
       debts,
-      lifestyleItems,
+      domiciles,
+      travelToys,
+      shareWealth,
       annualExpenses,
       investmentAmount,
       annualReturn,
     })
-  }, [currentStep, visitedSteps, jackpot, state, payoutType, filingStatus, debts, lifestyleItems, annualExpenses, investmentAmount, annualReturn, isLoaded])
+  }, [
+    currentStep,
+    visitedSteps,
+    jackpot,
+    state,
+    payoutType,
+    filingStatus,
+    selectedPreset,
+    debts,
+    domiciles,
+    travelToys,
+    shareWealth,
+    annualExpenses,
+    investmentAmount,
+    annualReturn,
+    isLoaded,
+  ])
 
   // Track analytics
   useEffect(() => {
@@ -106,7 +201,7 @@ export default function Home() {
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [jackpot, state, debts, lifestyleItems, annualExpenses, investmentAmount, isLoaded])
+  }, [jackpot, state, debts, domiciles, travelToys, shareWealth, annualExpenses, investmentAmount, isLoaded])
 
   const trackAnalytics = async () => {
     try {
@@ -121,7 +216,11 @@ export default function Home() {
           lifestyleDreams,
           investmentAmount,
           debts: debts.filter((d) => d.enabled).map((d) => ({ id: d.id, amount: d.amount })),
-          lifestyle: lifestyleItems.map((l) => ({ id: l.id, amount: l.amount })),
+          lifestyle: [
+            ...domiciles.filter((d) => d.enabled).map((d) => ({ id: d.id, amount: d.amount })),
+            ...travelToys.filter((d) => d.enabled).map((d) => ({ id: d.id, amount: d.amount })),
+            ...shareWealth.filter((d) => d.enabled).map((d) => ({ id: d.id, amount: d.amount })),
+          ],
         }),
       })
     } catch (error) {
@@ -142,8 +241,12 @@ export default function Home() {
             state,
             payoutType,
             debts: debts.filter((d) => d.enabled),
-            lifestyleItems,
-            annualExpenses,
+            lifestyleItems: [
+              ...domiciles.filter((d) => d.enabled),
+              ...travelToys.filter((d) => d.enabled),
+              ...shareWealth.filter((d) => d.enabled),
+            ],
+            annualExpenses: annualExpenses.filter((e) => e.enabled),
             investmentAmount,
             annualReturn,
             debtsCleared,
@@ -163,8 +266,12 @@ export default function Home() {
           netTakeHome: taxCalc.netTakeHome,
           state,
           debts: debts.filter((d) => d.enabled),
-          lifestyleItems,
-          annualExpenses,
+          lifestyleItems: [
+            ...domiciles.filter((d) => d.enabled),
+            ...travelToys.filter((d) => d.enabled),
+            ...shareWealth.filter((d) => d.enabled),
+          ],
+          annualExpenses: annualExpenses.filter((e) => e.enabled),
           investmentAmount,
           annualReturn,
           debtsCleared,
@@ -174,12 +281,10 @@ export default function Home() {
 
       if (pdfResponse.ok) {
         const html = await pdfResponse.text()
-        // Open in new window and trigger print dialog for PDF save
         const printWindow = window.open('', '_blank')
         if (printWindow) {
           printWindow.document.write(html)
           printWindow.document.close()
-          // Give the content time to render, then trigger print
           setTimeout(() => {
             printWindow.print()
           }, 250)
@@ -187,7 +292,7 @@ export default function Home() {
       }
 
       setShowEmailGate(false)
-      alert('You\'re all set! Save your report as PDF, and check your inbox for more resources.')
+      alert("You're all set! Save your report as PDF, and check your inbox for more resources.")
     } catch (error) {
       throw error
     }
@@ -202,7 +307,7 @@ export default function Home() {
   }
 
   const handleNext = () => {
-    if (currentStep < 6) {
+    if (currentStep < 8) {
       goToStep(currentStep + 1)
     } else {
       setShowEmailGate(true)
@@ -219,12 +324,15 @@ export default function Home() {
     clearWizardData()
     setCurrentStep(1)
     setVisitedSteps([1])
-    setJackpot(1000000000)
+    setJackpot(1500000000)
     setState('Washington')
     setPayoutType('lump-sum')
     setFilingStatus('single')
+    setSelectedPreset('custom')
     setDebts(DEFAULT_DEBTS)
-    setLifestyleItems(DEFAULT_LIFESTYLE)
+    setDomiciles(DEFAULT_DOMICILES)
+    setTravelToys(DEFAULT_TRAVEL_TOYS)
+    setShareWealth(DEFAULT_SHARE_WEALTH)
     setAnnualExpenses(DEFAULT_ANNUAL_EXPENSES)
     setInvestmentAmount(0)
     setAnnualReturn(7)
@@ -237,6 +345,28 @@ export default function Home() {
     visited: visitedSteps.includes(step.number),
   }))
 
+  // Navigation labels for each step
+  const getNextLabel = () => {
+    switch (currentStep) {
+      case 1:
+        return 'Next: Clear Your Debts'
+      case 2:
+        return 'Next: Dream Homes'
+      case 3:
+        return 'Next: Travel & Toys'
+      case 4:
+        return 'Next: Share the Wealth'
+      case 5:
+        return 'Next: Your New Normal'
+      case 6:
+        return 'Next: Plan Your Future'
+      case 7:
+        return 'See My Results'
+      default:
+        return 'Get My Report'
+    }
+  }
+
   return (
     <main className="min-h-screen py-4 md:py-8" ref={containerRef}>
       <div className="container mx-auto px-4 max-w-7xl">
@@ -244,7 +374,7 @@ export default function Home() {
 
         <ProgressIndicator
           currentStep={currentStep}
-          totalSteps={6}
+          totalSteps={8}
           steps={stepsWithVisited}
           onStepClick={goToStep}
         />
@@ -260,7 +390,7 @@ export default function Home() {
         <div className="transition-all duration-300 ease-in-out">
           {/* Step 1: The Setup */}
           {currentStep === 1 && (
-            <div className="animate-fadeIn">
+            <div className="animate-fadeIn space-y-6">
               <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10">
                 <div className="md:hidden mb-4">
                   <h2 className="text-3xl font-bold text-primary-purple">The Setup</h2>
@@ -279,14 +409,17 @@ export default function Home() {
                   federalTax={taxCalc.federalTax}
                   stateTax={taxCalc.stateTax}
                 />
-                <WizardNavigation
-                  currentStep={currentStep}
-                  totalSteps={6}
-                  onBack={handleBack}
-                  onNext={handleNext}
-                  nextLabel="Next: Clear Your Debts →"
-                />
               </div>
+
+              <PresetSelector selectedPreset={selectedPreset} onPresetChange={applyPreset} />
+
+              <WizardNavigation
+                currentStep={currentStep}
+                totalSteps={8}
+                onBack={handleBack}
+                onNext={handleNext}
+                nextLabel={getNextLabel()}
+              />
             </div>
           )}
 
@@ -299,50 +432,105 @@ export default function Home() {
               <DebtSection debts={debts} onDebtsChange={setDebts} />
               <WizardNavigation
                 currentStep={currentStep}
-                totalSteps={6}
+                totalSteps={8}
                 onBack={handleBack}
                 onNext={handleNext}
-                nextLabel="Next: Dream Big →"
+                nextLabel={getNextLabel()}
               />
             </div>
           )}
 
-          {/* Step 3: Fun + Dreams */}
+          {/* Step 3: Domiciles */}
           {currentStep === 3 && (
             <div className="animate-fadeIn">
               <div className="md:hidden mb-4 text-center">
-                <h2 className="text-3xl font-bold text-primary-purple">Fun + Dreams</h2>
+                <h2 className="text-3xl font-bold text-primary-purple">Domiciles</h2>
               </div>
-              <LifestyleSection items={lifestyleItems} onItemsChange={setLifestyleItems} />
+              <SpendingSection
+                title="Domiciles"
+                subtitle="Where will you call home? Dream big!"
+                items={domiciles}
+                onItemsChange={setDomiciles}
+                totalLabel="Total Real Estate"
+                emptyMessage="No homes? Living that nomad life!"
+              />
               <WizardNavigation
                 currentStep={currentStep}
-                totalSteps={6}
+                totalSteps={8}
                 onBack={handleBack}
                 onNext={handleNext}
-                nextLabel="Next: Annual Lifestyle →"
+                nextLabel={getNextLabel()}
               />
             </div>
           )}
 
-          {/* Step 4: Annual Lifestyle */}
+          {/* Step 4: Travel & Toys */}
           {currentStep === 4 && (
             <div className="animate-fadeIn">
               <div className="md:hidden mb-4 text-center">
-                <h2 className="text-3xl font-bold text-primary-purple">Annual Lifestyle</h2>
+                <h2 className="text-3xl font-bold text-primary-purple">Travel & Toys</h2>
+              </div>
+              <SpendingSection
+                title="Travel & Toys"
+                subtitle="What adventures await? What toys have you always wanted?"
+                items={travelToys}
+                onItemsChange={setTravelToys}
+                totalLabel="Total Fun Fund"
+                emptyMessage="Saving it all for later?"
+              />
+              <WizardNavigation
+                currentStep={currentStep}
+                totalSteps={8}
+                onBack={handleBack}
+                onNext={handleNext}
+                nextLabel={getNextLabel()}
+              />
+            </div>
+          )}
+
+          {/* Step 5: Share the Wealth */}
+          {currentStep === 5 && (
+            <div className="animate-fadeIn">
+              <div className="md:hidden mb-4 text-center">
+                <h2 className="text-3xl font-bold text-primary-purple">Share the Wealth</h2>
+              </div>
+              <SpendingSection
+                title="Share the Wealth"
+                subtitle="Who would you take care of? What causes matter to you?"
+                items={shareWealth}
+                onItemsChange={setShareWealth}
+                totalLabel="Total Generosity"
+                emptyMessage="All for yourself? No judgment!"
+              />
+              <WizardNavigation
+                currentStep={currentStep}
+                totalSteps={8}
+                onBack={handleBack}
+                onNext={handleNext}
+                nextLabel={getNextLabel()}
+              />
+            </div>
+          )}
+
+          {/* Step 6: Your New Normal */}
+          {currentStep === 6 && (
+            <div className="animate-fadeIn">
+              <div className="md:hidden mb-4 text-center">
+                <h2 className="text-3xl font-bold text-primary-purple">Your New Normal</h2>
               </div>
               <AnnualExpenses expenses={annualExpenses} onExpensesChange={setAnnualExpenses} />
               <WizardNavigation
                 currentStep={currentStep}
-                totalSteps={6}
+                totalSteps={8}
                 onBack={handleBack}
                 onNext={handleNext}
-                nextLabel="Next: Invest for the Future →"
+                nextLabel={getNextLabel()}
               />
             </div>
           )}
 
-          {/* Step 5: The Future */}
-          {currentStep === 5 && (
+          {/* Step 7: The Future */}
+          {currentStep === 7 && (
             <div className="animate-fadeIn">
               <div className="md:hidden mb-4 text-center">
                 <h2 className="text-3xl font-bold text-primary-purple">The Future</h2>
@@ -358,16 +546,16 @@ export default function Home() {
               />
               <WizardNavigation
                 currentStep={currentStep}
-                totalSteps={6}
+                totalSteps={8}
                 onBack={handleBack}
                 onNext={handleNext}
-                nextLabel="See My Results →"
+                nextLabel={getNextLabel()}
               />
             </div>
           )}
 
-          {/* Step 6: Your Results */}
-          {currentStep === 6 && (
+          {/* Step 8: Your Results */}
+          {currentStep === 8 && (
             <div className="animate-fadeIn space-y-6">
               <div className="md:hidden mb-4 text-center">
                 <h2 className="text-3xl font-bold text-primary-purple">Your Results</h2>
@@ -396,10 +584,10 @@ export default function Home() {
 
               <WizardNavigation
                 currentStep={currentStep}
-                totalSteps={6}
+                totalSteps={8}
                 onBack={handleBack}
                 onNext={() => setShowEmailGate(true)}
-                nextLabel="Get My Report →"
+                nextLabel="Get My Report"
               />
             </div>
           )}
