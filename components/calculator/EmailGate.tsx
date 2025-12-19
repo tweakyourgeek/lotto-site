@@ -75,6 +75,18 @@ export default function EmailGate({ onSubmit, isOpen, onClose }: EmailGateProps)
                 Print / Save as PDF
               </button>
 
+              <a
+                href="https://docs.google.com/spreadsheets/d/1qvNDRAk_8t0Vm0HC7_AfxYS3kaiIJD8AW4iIIKhKk8E/copy?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-white border-2 border-primary-purple text-primary-purple font-semibold py-4 px-6 rounded-lg hover:bg-light-blush transition-all text-lg flex items-center justify-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                Dream Life Income Calculator
+              </a>
+
               <button
                 onClick={handleClose}
                 className="w-full text-navy/60 font-medium py-3 hover:text-navy transition-colors"
