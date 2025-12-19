@@ -147,7 +147,7 @@ export default function EmailGate({ onSubmit, isOpen, onClose }: EmailGateProps)
             </li>
             <li className="flex items-start">
               <span className="text-primary-purple mr-2">✓</span>
-              <span>Dream Life Calculator to plan your actual goals</span>
+              <a href="https://docs.google.com/spreadsheets/d/1qvNDRAk_8t0Vm0HC7_AfxYS3kaiIJD8AW4iIIKhKk8E/copy?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-primary-purple hover:underline">Dream Life Income Calculator</a> to plan your actual goals
             </li>
           </ul>
         </div>

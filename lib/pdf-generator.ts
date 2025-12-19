@@ -213,7 +213,7 @@ export function generatePDFHTML(data: PDFData): string {
     <h3 style="color: #7A5980; margin-top: 0;">While You're Waiting on Your Windfall...</h3>
     <p>Let's help you reach your Dream Life, one step at a time.</p>
     <ul style="color: #3B3B58;">
-      <li><strong>Dream Life Calculator:</strong> Plan your real financial goals</li>
+      <li><a href="https://docs.google.com/spreadsheets/d/1qvNDRAk_8t0Vm0HC7_AfxYS3kaiIJD8AW4iIIKhKk8E/copy?usp=sharing" style="color: #7A5980; font-weight: 600;">Dream Life Income Calculator:</a> Plan your real financial goals</li>
     </ul>
     <p style="text-align: center; margin-top: 20px;">
       <a href="https://tweakyourgeek.net" style="color: #7A5980; font-weight: 600;">Start Your Journey →</a>
