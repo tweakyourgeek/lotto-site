@@ -70,14 +70,14 @@ export const DEFAULT_DOMICILES = [
   { id: 'investment-property', label: 'Investment Property', amount: 800000, why: 'Building wealth through real estate', enabled: false },
 ]
 
-// Travel / Epic Experiences - Vehicles, trips, luxury items
+// Luxury & Travel - Vehicles, trips, luxury items
 export const DEFAULT_TRAVEL_TOYS = [
   { id: 'dream-car', label: 'Dream Car', amount: 250000, why: 'Drive in style', enabled: true },
   { id: 'travel-fund', label: 'Travel Fund', amount: 500000, why: 'See the world', enabled: true },
-  { id: 'private-jet', label: 'Private Jet', amount: 5000000, why: 'Travel in ultimate style', enabled: false },
-  { id: 'boat-yacht', label: 'Boat / Yacht', amount: 2000000, why: 'Life on the water', enabled: false },
-  { id: 'rocket-space', label: 'Space Travel / Rocket', amount: 500000, why: 'To infinity and beyond', enabled: false },
-  { id: 'jewelry', label: 'Jewelry & Watches', amount: 500000, why: 'Timeless luxury', enabled: false },
+  { id: 'private-jet', label: 'Private Jet', amount: 15000000, why: 'Travel in ultimate style', enabled: false },
+  { id: 'boat-yacht', label: 'Yacht', amount: 10000000, why: 'Life on the water', enabled: false },
+  { id: 'rocket-space', label: 'Space Flight', amount: 450000, why: 'To infinity and beyond', enabled: false },
+  { id: 'jewelry', label: 'Jewelry & Watches', amount: 1000000, why: 'Timeless luxury', enabled: false },
   { id: 'experiences', label: 'Epic Experiences', amount: 200000, why: 'Making memories', enabled: true },
 ]
 
@@ -127,11 +127,11 @@ export const PRESETS = {
     ],
     travelToys: [
       { id: 'dream-car', amount: 350000, enabled: true },
-      { id: 'travel-fund', amount: 750000, enabled: true },
-      { id: 'private-jet', amount: 10000000, enabled: true },
-      { id: 'boat-yacht', amount: 3000000, enabled: true },
-      { id: 'rocket-space', amount: 500000, enabled: false },
-      { id: 'jewelry', amount: 1000000, enabled: true },
+      { id: 'travel-fund', amount: 1000000, enabled: true },
+      { id: 'private-jet', amount: 25000000, enabled: true },
+      { id: 'boat-yacht', amount: 15000000, enabled: true },
+      { id: 'rocket-space', amount: 450000, enabled: true },
+      { id: 'jewelry', amount: 2000000, enabled: true },
       { id: 'experiences', amount: 500000, enabled: true },
     ],
     shareWealth: [
