@@ -258,41 +258,7 @@ export default function Home() {
 
       if (!response.ok) throw new Error('Failed to send email')
 
-      const pdfResponse = await fetch('/api/pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          jackpot,
-          netTakeHome: taxCalc.netTakeHome,
-          state,
-          debts: debts.filter((d) => d.enabled),
-          lifestyleItems: [
-            ...domiciles.filter((d) => d.enabled),
-            ...travelToys.filter((d) => d.enabled),
-            ...shareWealth.filter((d) => d.enabled),
-          ],
-          annualExpenses: annualExpenses.filter((e) => e.enabled),
-          investmentAmount,
-          annualReturn,
-          debtsCleared,
-          lifestyleDreams,
-        }),
-      })
-
-      if (pdfResponse.ok) {
-        const html = await pdfResponse.text()
-        const printWindow = window.open('', '_blank')
-        if (printWindow) {
-          printWindow.document.write(html)
-          printWindow.document.close()
-          setTimeout(() => {
-            printWindow.print()
-          }, 250)
-        }
-      }
-
-      setShowEmailGate(false)
-      alert("You're all set! Save your report as PDF, and check your inbox for more resources.")
+      // EmailGate will show success screen with print button - no auto-print
     } catch (error) {
       throw error
     }
