@@ -264,6 +264,45 @@ export default function Home() {
     }
   }
 
+  const handlePrint = async () => {
+    try {
+      const pdfResponse = await fetch('/api/pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jackpot,
+          netTakeHome: taxCalc.netTakeHome,
+          state,
+          debts: debts.filter((d) => d.enabled),
+          lifestyleItems: [
+            ...domiciles.filter((d) => d.enabled),
+            ...travelToys.filter((d) => d.enabled),
+            ...shareWealth.filter((d) => d.enabled),
+          ],
+          annualExpenses: annualExpenses.filter((e) => e.enabled),
+          investmentAmount,
+          annualReturn,
+          debtsCleared,
+          lifestyleDreams,
+        }),
+      })
+
+      if (pdfResponse.ok) {
+        const html = await pdfResponse.text()
+        const printWindow = window.open('', '_blank')
+        if (printWindow) {
+          printWindow.document.write(html)
+          printWindow.document.close()
+          setTimeout(() => {
+            printWindow.print()
+          }, 250)
+        }
+      }
+    } catch (error) {
+      console.error('Print error:', error)
+    }
+  }
+
   const goToStep = (step: number) => {
     setCurrentStep(step)
     if (!visitedSteps.includes(step)) {
@@ -574,6 +613,9 @@ export default function Home() {
             </a>{' '}
             (established 1999)
           </p>
+          <p className="mt-2 text-xs text-navy/40">
+            This site contains affiliate links. Clicking them costs you nothing and helps support my small business.
+          </p>
         </footer>
       </div>
 
@@ -581,6 +623,7 @@ export default function Home() {
         isOpen={showEmailGate}
         onClose={() => setShowEmailGate(false)}
         onSubmit={handleEmailSubmit}
+        onPrint={handlePrint}
       />
     </main>
   )

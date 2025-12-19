@@ -4,11 +4,12 @@ import { useState } from 'react'
 
 interface EmailGateProps {
   onSubmit: (email: string) => void
+  onPrint: () => void
   isOpen: boolean
   onClose: () => void
 }
 
-export default function EmailGate({ onSubmit, isOpen, onClose }: EmailGateProps) {
+export default function EmailGate({ onSubmit, onPrint, isOpen, onClose }: EmailGateProps) {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
@@ -66,7 +67,7 @@ export default function EmailGate({ onSubmit, isOpen, onClose }: EmailGateProps)
 
             <div className="space-y-4">
               <button
-                onClick={() => window.print()}
+                onClick={onPrint}
                 className="w-full bg-gradient-to-r from-primary-purple to-light-lavender text-white font-semibold py-4 px-6 rounded-lg hover:shadow-lg transition-all text-lg flex items-center justify-center gap-2"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

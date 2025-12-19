@@ -35,7 +35,7 @@ export default function RealityCheck({ onGetReport }: RealityCheckProps) {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <a
-              href="https://www.imdb.com/title/tt13925890/"
+              href="https://amzn.to/3YyRk7p"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow"
@@ -47,7 +47,7 @@ export default function RealityCheck({ onGetReport }: RealityCheckProps) {
               </div>
             </a>
             <a
-              href="https://www.imdb.com/title/tt0088850/"
+              href="https://amzn.to/4p2dD0c"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow"
