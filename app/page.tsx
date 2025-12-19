@@ -390,6 +390,9 @@ export default function Home() {
           lifestyleDreams={lifestyleDreams}
           invested={investmentAmount}
           currentStep={currentStep}
+          payoutType={payoutType}
+          jackpot={jackpot}
+          annualExpenses={totalAnnualExpenses}
         />
 
         <div className="transition-all duration-300 ease-in-out">
@@ -575,6 +578,9 @@ export default function Home() {
                 lifestyleDreams={lifestyleDreams}
                 invested={investmentAmount}
                 projections={projections}
+                payoutType={payoutType}
+                jackpot={jackpot}
+                annualExpenses={totalAnnualExpenses}
               />
 
               <DreamLifeCost annualExpenses={totalAnnualExpenses} />
