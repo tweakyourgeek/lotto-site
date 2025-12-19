@@ -1,0 +1,12 @@
+{
+  "name": "lottery-screenshots",
+  "version": "1.0.0",
+  "description": "Screenshot capture for lottery calculator documentation",
+  "scripts": {
+    "capture": "node capture-screenshots.js",
+    "capture:local": "node capture-screenshots.js --local"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}
