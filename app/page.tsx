@@ -544,6 +544,9 @@ export default function Home() {
                 defaultAmount={investmentAmount}
                 remainingMoney={taxCalc.netTakeHome - debtsCleared - lifestyleDreams - investmentAmount}
                 annualExpenses={totalAnnualExpenses}
+                payoutType={payoutType}
+                jackpot={jackpot}
+                netTakeHome={taxCalc.netTakeHome}
                 onInvestmentChange={(amount, returnRate) => {
                   setInvestmentAmount(amount)
                   setAnnualReturn(returnRate)
