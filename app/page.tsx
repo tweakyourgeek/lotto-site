@@ -613,6 +613,9 @@ export default function Home() {
             </a>{' '}
             (established 1999)
           </p>
+          <p className="mt-2 text-xs text-navy/40">
+            This site contains affiliate links. Clicking them costs you nothing and helps support my small business.
+          </p>
         </footer>
       </div>
 
