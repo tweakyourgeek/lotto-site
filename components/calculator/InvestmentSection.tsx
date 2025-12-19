@@ -7,6 +7,9 @@ interface InvestmentSectionProps {
   defaultAmount: number
   remainingMoney: number
   annualExpenses: number
+  payoutType: 'lump-sum' | 'annuity'
+  jackpot: number
+  netTakeHome: number
   onInvestmentChange: (amount: number, annualReturn: number) => void
 }
 
@@ -14,11 +17,19 @@ export default function InvestmentSection({
   defaultAmount,
   remainingMoney,
   annualExpenses,
+  payoutType,
+  jackpot,
+  netTakeHome,
   onInvestmentChange,
 }: InvestmentSectionProps) {
   const [investmentAmount, setInvestmentAmount] = useState(defaultAmount)
   const [annualReturn, setAnnualReturn] = useState(7)
   const [investAll, setInvestAll] = useState(false)
+
+  // Annuity calculations
+  const annualAnnuityPayment = jackpot / 30 // Gross annual payment
+  const annualAnnuityNet = netTakeHome / 30 // Net annual payment after taxes
+  const yearlyContribution = Math.max(0, annualAnnuityNet - annualExpenses) // What's left to invest each year
 
   // Sync with defaultAmount changes
   useEffect(() => {
@@ -26,24 +37,6 @@ export default function InvestmentSection({
       setInvestmentAmount(defaultAmount)
     }
   }, [defaultAmount])
-
-  // Calculate projections with and without withdrawals
-  const value10YearsNoWithdrawals = calculateInvestmentGrowth(investmentAmount, annualReturn, 10)
-  const value30YearsNoWithdrawals = calculateInvestmentGrowth(investmentAmount, annualReturn, 30)
-
-  // With annual withdrawals
-  const value10YearsWithWithdrawals = calculateInvestmentGrowthWithdrawals(
-    investmentAmount,
-    annualReturn,
-    annualExpenses,
-    10
-  )
-  const value30YearsWithWithdrawals = calculateInvestmentGrowthWithdrawals(
-    investmentAmount,
-    annualReturn,
-    annualExpenses,
-    30
-  )
 
   const handleAmountChange = (value: number) => {
     setInvestmentAmount(value)
@@ -65,11 +58,113 @@ export default function InvestmentSection({
     }
   }
 
-  // Calculate how much they earn annually vs spend
+  // LUMP SUM calculations
+  const value10YearsNoWithdrawals = calculateInvestmentGrowth(investmentAmount, annualReturn, 10)
+  const value30YearsNoWithdrawals = calculateInvestmentGrowth(investmentAmount, annualReturn, 30)
+  const value10YearsWithWithdrawals = calculateGrowthWithWithdrawals(investmentAmount, annualReturn, annualExpenses, 10)
+  const value30YearsWithWithdrawals = calculateGrowthWithWithdrawals(investmentAmount, annualReturn, annualExpenses, 30)
+
+  // ANNUITY calculations - annual contributions
+  const value10YearsAnnuity = calculateGrowthWithContributions(0, yearlyContribution, annualReturn, 10)
+  const value30YearsAnnuity = calculateGrowthWithContributions(0, yearlyContribution, annualReturn, 30)
+
+  // Lump sum earnings math
   const annualEarnings = investmentAmount * (annualReturn / 100)
   const netAnnualGain = annualEarnings - annualExpenses
   const willRunOut = netAnnualGain < 0
 
+  // ANNUITY MODE
+  if (payoutType === 'annuity') {
+    const canInvest = yearlyContribution > 0
+
+    return (
+      <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10">
+        <div className="mb-4 hidden md:block">
+          <h2 className="text-3xl md:text-4xl font-bold text-primary-purple mb-2">
+            The Future
+          </h2>
+          <p className="text-lg text-navy">Building wealth year by year</p>
+        </div>
+        <div className="mb-4 md:hidden">
+          <p className="text-lg text-navy">Building wealth year by year</p>
+        </div>
+
+        {/* Annuity Breakdown */}
+        <div className="p-4 bg-gradient-to-r from-primary-purple/10 to-light-lavender/10 rounded-lg border border-primary-purple/20 mb-6">
+          <p className="text-sm font-semibold text-navy mb-3">Your Annuity Breakdown:</p>
+          <div className="text-sm text-navy space-y-2">
+            <p>• You receive <strong>{formatCurrency(annualAnnuityNet)}/year</strong> (after taxes) for 30 years</p>
+            <p>• Your annual expenses ("new normal"): <strong>{formatCurrency(annualExpenses)}</strong></p>
+            {canInvest ? (
+              <p className="text-green-600 font-semibold">
+                • ✓ Each year you can invest <strong>{formatCurrency(yearlyContribution)}</strong>
+              </p>
+            ) : (
+              <p className="text-red-600 font-semibold">
+                • ⚠️ Your expenses exceed your annual payment by {formatCurrency(Math.abs(yearlyContribution))}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Annual Return Slider */}
+        <div className="mb-6">
+          <label htmlFor="annual-return" className="block font-medium text-navy mb-2">
+            Annual Return: {annualReturn}%
+          </label>
+          <input
+            id="annual-return"
+            type="range"
+            min="1"
+            max="12"
+            step="0.5"
+            value={annualReturn}
+            onChange={(e) => handleReturnChange(Number(e.target.value))}
+            className="w-full h-3 bg-light-blush rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary-purple [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:h-6 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-primary-purple [&::-moz-range-thumb]:border-0"
+          />
+          <div className="flex justify-between text-xs text-navy/60 mt-1">
+            <span>Conservative (1%)</span>
+            <span>Aggressive (12%)</span>
+          </div>
+        </div>
+
+        {/* Annuity Growth Projections */}
+        {canInvest && (
+          <div className="space-y-4">
+            <h3 className="font-semibold text-navy">
+              Investing {formatCurrency(yearlyContribution)} each year at {annualReturn}%:
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-light-blush rounded-xl p-4">
+                <p className="text-sm text-navy mb-1">In 10 Years</p>
+                <div className="text-2xl font-bold text-primary-purple">
+                  {formatCurrency(value10YearsAnnuity)}
+                </div>
+                <p className="text-xs text-navy/60 mt-1">
+                  From {formatCurrency(yearlyContribution * 10)} contributed
+                </p>
+              </div>
+              <div className="bg-gradient-to-br from-primary-purple to-navy rounded-xl p-4">
+                <p className="text-sm text-white mb-1">In 30 Years (end of annuity)</p>
+                <div className="text-2xl font-bold text-white">
+                  {formatCurrency(value30YearsAnnuity)}
+                </div>
+                <p className="text-xs text-white/70 mt-1">
+                  From {formatCurrency(yearlyContribution * 30)} contributed
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <p className="text-center text-base text-mauve-pink italic mt-6">
+          Slow and steady builds lasting wealth.
+        </p>
+      </div>
+    )
+  }
+
+  // LUMP SUM MODE (original behavior)
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10">
       <div className="mb-4 hidden md:block">
@@ -112,7 +207,7 @@ export default function InvestmentSection({
 
         <div>
           <label htmlFor="investment-amount" className="block font-medium text-navy mb-2">
-            Amount Invested
+            Initial Investment
           </label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-lg text-primary-purple">
@@ -209,8 +304,8 @@ export default function InvestmentSection({
   )
 }
 
-// Helper function to calculate growth with annual withdrawals
-function calculateInvestmentGrowthWithdrawals(
+// Calculate growth with annual withdrawals
+function calculateGrowthWithWithdrawals(
   principal: number,
   annualReturn: number,
   annualWithdrawal: number,
@@ -219,7 +314,21 @@ function calculateInvestmentGrowthWithdrawals(
   let balance = principal
   for (let year = 0; year < years; year++) {
     balance = balance * (1 + annualReturn / 100) - annualWithdrawal
-    if (balance < 0) return 0 // Ran out of money
+    if (balance < 0) return 0
+  }
+  return balance
+}
+
+// Calculate growth with annual contributions (for annuity)
+function calculateGrowthWithContributions(
+  initialPrincipal: number,
+  annualContribution: number,
+  annualReturn: number,
+  years: number
+): number {
+  let balance = initialPrincipal
+  for (let year = 0; year < years; year++) {
+    balance = (balance + annualContribution) * (1 + annualReturn / 100)
   }
   return balance
 }
