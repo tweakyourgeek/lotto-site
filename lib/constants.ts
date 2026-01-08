@@ -202,3 +202,84 @@ export const LUMP_SUM_PERCENTAGE = 0.458 // Actual average cash option (~45.8%)
 export const FEDERAL_WITHHOLDING = 0.24
 export const ADDITIONAL_FEDERAL_TAX = 0.13
 export const TOTAL_FEDERAL_TAX = FEDERAL_WITHHOLDING + ADDITIONAL_FEDERAL_TAX // 37% total
+
+// Dream Life Calculator - Expense Categories
+export interface DreamExpense {
+  id: string
+  label: string
+  amount: number
+  frequency: 'weekly' | 'monthly' | 'quarterly' | 'yearly' | 'once'
+  enabled: boolean
+}
+
+export const DEFAULT_HOME_EXPENSES: DreamExpense[] = [
+  { id: 'mortgage-rent', label: 'Mortgage/Rent', amount: 1800, frequency: 'monthly', enabled: true },
+  { id: 'property-tax', label: 'Property Taxes', amount: 2000, frequency: 'yearly', enabled: true },
+  { id: 'home-insurance', label: 'Home Insurance', amount: 2000, frequency: 'yearly', enabled: true },
+  { id: 'hoa', label: 'HOA Fees', amount: 0, frequency: 'monthly', enabled: false },
+  { id: 'maintenance', label: 'Maintenance/Repairs', amount: 2000, frequency: 'yearly', enabled: true },
+  { id: 'utilities', label: 'Utilities (Electric, Water, Gas)', amount: 500, frequency: 'monthly', enabled: true },
+]
+
+export const DEFAULT_DAILY_RHYTHM: DreamExpense[] = [
+  { id: 'groceries', label: 'Groceries', amount: 800, frequency: 'monthly', enabled: true },
+  { id: 'dining-out', label: 'Dining Out', amount: 400, frequency: 'monthly', enabled: true },
+  { id: 'transportation', label: 'Transportation/Gas', amount: 200, frequency: 'monthly', enabled: true },
+  { id: 'car-insurance', label: 'Car Insurance', amount: 100, frequency: 'monthly', enabled: true },
+  { id: 'phone-internet', label: 'Phone & Internet', amount: 150, frequency: 'monthly', enabled: true },
+  { id: 'subscriptions', label: 'Subscriptions (Streaming, etc)', amount: 50, frequency: 'monthly', enabled: true },
+]
+
+export const DEFAULT_SUPPORT_SQUAD: DreamExpense[] = [
+  { id: 'housekeeper', label: 'Housekeeper', amount: 150, frequency: 'weekly', enabled: false },
+  { id: 'personal-assistant', label: 'Personal Assistant', amount: 0, frequency: 'monthly', enabled: false },
+  { id: 'chef', label: 'Personal Chef', amount: 0, frequency: 'weekly', enabled: false },
+  { id: 'nanny-childcare', label: 'Nanny/Childcare', amount: 0, frequency: 'monthly', enabled: false },
+  { id: 'lawn-care', label: 'Lawn/Garden Service', amount: 0, frequency: 'monthly', enabled: false },
+]
+
+export const DEFAULT_SELF_CARE: DreamExpense[] = [
+  { id: 'therapy', label: 'Therapy/Counseling', amount: 400, frequency: 'monthly', enabled: false },
+  { id: 'gym', label: 'Gym Membership', amount: 80, frequency: 'monthly', enabled: true },
+  { id: 'personal-trainer', label: 'Personal Trainer', amount: 0, frequency: 'monthly', enabled: false },
+  { id: 'spa-treatments', label: 'Spa Treatments', amount: 0, frequency: 'monthly', enabled: false },
+  { id: 'yoga-classes', label: 'Yoga/Fitness Classes', amount: 0, frequency: 'monthly', enabled: false },
+  { id: 'supplements', label: 'Vitamins/Supplements', amount: 0, frequency: 'monthly', enabled: false },
+]
+
+export const DEFAULT_ADVENTURES: DreamExpense[] = [
+  { id: 'annual-vacation', label: 'Annual Vacation Budget', amount: 8000, frequency: 'yearly', enabled: true },
+  { id: 'weekend-trips', label: 'Weekend Getaways', amount: 2000, frequency: 'yearly', enabled: false },
+  { id: 'entertainment', label: 'Entertainment (Concerts, Shows)', amount: 200, frequency: 'monthly', enabled: true },
+  { id: 'hobbies', label: 'Hobbies & Activities', amount: 150, frequency: 'monthly', enabled: true },
+  { id: 'experiences', label: 'Epic Experiences', amount: 0, frequency: 'yearly', enabled: false },
+]
+
+export const DEFAULT_TIME_FREEDOM: DreamExpense[] = [
+  { id: 'sabbatical-fund', label: 'Sabbatical Fund', amount: 0, frequency: 'yearly', enabled: false },
+  { id: 'education', label: 'Education/Learning', amount: 0, frequency: 'yearly', enabled: false },
+  { id: 'giving-back', label: 'Charitable Giving', amount: 0, frequency: 'monthly', enabled: false },
+  { id: 'emergency-fund', label: 'Emergency Fund Contribution', amount: 500, frequency: 'monthly', enabled: true },
+  { id: 'other', label: 'Other/Miscellaneous', amount: 200, frequency: 'monthly', enabled: true },
+]
+
+// Dream Life Presets
+export type DreamPresetType = 'comfortable' | 'luxury-lite' | 'family-first' | 'custom'
+
+export const DREAM_PRESETS = {
+  comfortable: {
+    name: '🏡 Comfortable Freedom',
+    description: 'Work optional, modest lifestyle',
+    totalAnnual: 75000,
+  },
+  'luxury-lite': {
+    name: '✨ Luxury Lite',
+    description: 'Nice things, not excessive',
+    totalAnnual: 125000,
+  },
+  'family-first': {
+    name: '👨‍👩‍👧‍👦 Family First',
+    description: 'Kids, experiences, stability',
+    totalAnnual: 95000,
+  },
+}

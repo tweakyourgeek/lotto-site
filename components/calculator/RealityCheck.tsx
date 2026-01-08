@@ -15,17 +15,25 @@ export default function RealityCheck({ onGetReport }: RealityCheckProps) {
         {/* CTA Section */}
         <div className="bg-gradient-to-r from-primary-purple/10 to-light-lavender/20 rounded-xl p-6 text-center">
           <p className="text-xl text-navy font-semibold mb-3">
-            While you're waiting on your windfall...
+            Your dream life is closer than you think
           </p>
           <p className="text-navy/80 mb-4">
-            Let's help you reach your Dream Life, one step at a time.
+            Skip the lottery and calculate what your dream life actually costs.
           </p>
-          <button
-            onClick={onGetReport}
-            className="inline-block px-6 py-3 bg-primary-purple text-white rounded-lg hover:bg-light-lavender transition-colors font-semibold"
-          >
-            Get Your Personalized Report
-          </button>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href="/dream-life"
+              className="inline-block px-6 py-3 bg-gradient-to-r from-primary-purple to-light-lavender text-white rounded-lg hover:shadow-lg transition-all font-semibold"
+            >
+              Calculate My Dream Life
+            </a>
+            <button
+              onClick={onGetReport}
+              className="inline-block px-6 py-3 border-2 border-primary-purple text-primary-purple rounded-lg hover:bg-light-blush transition-colors font-semibold"
+            >
+              Get Lottery Report
+            </button>
+          </div>
         </div>
 
         {/* Movie References */}

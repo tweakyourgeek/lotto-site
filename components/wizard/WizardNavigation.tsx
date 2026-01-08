@@ -7,6 +7,7 @@ interface WizardNavigationProps {
   onNext: () => void
   nextLabel?: string
   isLastStep?: boolean
+  hideNext?: boolean
 }
 
 export default function WizardNavigation({
@@ -16,6 +17,7 @@ export default function WizardNavigation({
   onNext,
   nextLabel,
   isLastStep,
+  hideNext,
 }: WizardNavigationProps) {
   const defaultNextLabel = isLastStep ? 'See My Results →' : 'Next →'
 
@@ -32,12 +34,14 @@ export default function WizardNavigation({
         <div />
       )}
 
-      <button
-        onClick={onNext}
-        className="px-8 py-3 bg-gradient-to-r from-primary-purple to-light-lavender text-white font-semibold rounded-lg hover:shadow-lg transition-all ml-auto"
-      >
-        {nextLabel || defaultNextLabel}
-      </button>
+      {!hideNext && (
+        <button
+          onClick={onNext}
+          className="px-8 py-3 bg-gradient-to-r from-primary-purple to-light-lavender text-white font-semibold rounded-lg hover:shadow-lg transition-all ml-auto"
+        >
+          {nextLabel || defaultNextLabel}
+        </button>
+      )}
     </div>
   )
 }

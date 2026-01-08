@@ -15,6 +15,7 @@ import ProgressIndicator from '@/components/wizard/ProgressIndicator'
 import WizardNavigation from '@/components/wizard/WizardNavigation'
 import MoneyRemaining from '@/components/wizard/MoneyRemaining'
 import StartOverButton from '@/components/wizard/StartOverButton'
+import AppNavigation from '@/components/shared/AppNavigation'
 import { calculateNetTakeHome, calculateProjections } from '@/lib/calculations'
 import {
   DEFAULT_DEBTS,
@@ -376,6 +377,7 @@ export default function Home() {
     <main className="min-h-screen py-4 md:py-8" ref={containerRef}>
       <div className="container mx-auto px-4 max-w-7xl">
         <StartOverButton onStartOver={handleStartOver} />
+        <AppNavigation currentApp="lottery" />
 
         <ProgressIndicator
           currentStep={currentStep}
