@@ -1,4 +1,5 @@
 export const STATE_TAX_RATES: Record<string, number> = {
+  'International': 0, // For users outside the US - consult local tax authorities
   'Alabama': 0,
   'Alaska': 0,
   'Arizona': 4.8,

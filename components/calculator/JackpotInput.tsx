@@ -141,6 +141,13 @@ export default function JackpotInput({
                 <p className="font-bold text-dusty-rose">-{formatCurrency(stateTax)}</p>
               </div>
             </div>
+            {state === 'International' && (
+              <div className="mt-3 pt-3 border-t border-dusty-rose/20">
+                <p className="text-xs text-navy/60 text-center">
+                  💡 Using US federal tax only. Check your country's lottery tax rules for accurate calculations.
+                </p>
+              </div>
+            )}
           </div>
         )}
 
