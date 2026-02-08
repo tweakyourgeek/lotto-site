@@ -7,13 +7,6 @@ export function formatCurrency(amount: number): string {
   }).format(amount)
 }
 
-export function formatNumber(num: number): string {
-  return new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(num)
-}
-
 export interface IncomeBreakdown {
   annual: number
   monthly: number
