@@ -47,10 +47,10 @@ export default function AnnualExpenses({ expenses, onExpensesChange }: AnnualExp
         <h2 className="text-3xl md:text-4xl font-bold text-primary-purple mb-2">
           Your New Normal
         </h2>
-        <p className="text-lg text-navy">What does it cost to live your dream life each year?</p>
+        <p className="text-lg text-navy">What does your windfall lifestyle cost each year?</p>
       </div>
       <div className="mb-4 md:hidden">
-        <p className="text-lg text-navy">What does it cost to live your dream life each year?</p>
+        <p className="text-lg text-navy">What does your windfall lifestyle cost each year?</p>
       </div>
 
       {/* Quick action buttons */}
@@ -130,7 +130,7 @@ export default function AnnualExpenses({ expenses, onExpensesChange }: AnnualExp
           </div>
           <p className="text-lg text-mauve-pink mt-3 italic">
             {totalAnnual > 0
-              ? 'This is what your dream life costs to maintain.'
+              ? 'This is what your windfall lifestyle costs to maintain.'
               : 'Keeping it simple? Respect.'}
           </p>
         </div>

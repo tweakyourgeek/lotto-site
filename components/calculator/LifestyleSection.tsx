@@ -28,7 +28,7 @@ export default function LifestyleSection({ items, onItemsChange }: LifestyleSect
     <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10">
       <div className="mb-4 hidden md:block">
         <h2 className="text-3xl md:text-4xl font-bold text-primary-purple mb-2">
-          Fun + Dreams
+          Jackpot Wishlist
         </h2>
         <p className="text-lg text-navy">What would you actually DO with the money?</p>
       </div>
@@ -84,7 +84,7 @@ export default function LifestyleSection({ items, onItemsChange }: LifestyleSect
 
       <div className="mt-4 pt-4 border-t-2 border-dusty-rose md:col-span-2">
         <div className="text-center">
-          <p className="text-sm text-navy mb-2">Total Dreams</p>
+          <p className="text-sm text-navy mb-2">Total Fantasy Spending</p>
           <div className="text-4xl md:text-5xl font-bold text-primary-purple">
             {formatCurrency(totalDreams)}
           </div>

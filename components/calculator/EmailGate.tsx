@@ -2,6 +2,10 @@
 
 import { useState } from 'react'
 
+const DREAM_LIFE_CALCULATOR_URL =
+  process.env.NEXT_PUBLIC_DREAM_LIFE_CALCULATOR_URL ||
+  'https://docs.google.com/spreadsheets/d/1qvNDRAk_8t0Vm0HC7_AfxYS3kaiIJD8AW4iIIKhKk8E/copy?usp=sharing'
+
 interface EmailGateProps {
   onSubmit: (email: string) => void
   onPrint: () => void
@@ -76,8 +80,14 @@ export default function EmailGate({ onSubmit, onPrint, isOpen, onClose }: EmailG
                 Print / Save as PDF
               </button>
 
+              <div className="pt-2 pb-1">
+                <p className="text-sm text-navy/70 italic">
+                  You just spent a billion imaginary dollars. But what does YOUR real dream life actually cost?
+                </p>
+              </div>
+
               <a
-                href="https://docs.google.com/spreadsheets/d/1qvNDRAk_8t0Vm0HC7_AfxYS3kaiIJD8AW4iIIKhKk8E/copy?usp=sharing"
+                href={DREAM_LIFE_CALCULATOR_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full bg-white border-2 border-primary-purple text-primary-purple font-semibold py-4 px-6 rounded-lg hover:bg-light-blush transition-all text-lg flex items-center justify-center gap-2"
@@ -85,7 +95,7 @@ export default function EmailGate({ onSubmit, onPrint, isOpen, onClose }: EmailG
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
-                Dream Life Income Calculator
+                Dream Life Calculator — The Real Numbers
               </a>
 
               <button
@@ -121,7 +131,7 @@ export default function EmailGate({ onSubmit, onPrint, isOpen, onClose }: EmailG
             Get Your Personalized Report
           </h2>
           <p className="text-lg text-navy">
-            While you're waiting on your windfall, let's help you reach your Dream Life.
+            You just planned a billion-dollar fantasy. Now let's figure out what your real dream life costs.
           </p>
         </div>
 
@@ -156,11 +166,11 @@ export default function EmailGate({ onSubmit, onPrint, isOpen, onClose }: EmailG
           <ul className="space-y-2 text-sm text-navy/80">
             <li className="flex items-start">
               <span className="text-primary-purple mr-2">✓</span>
-              <span>Your complete lottery breakdown (print or save as PDF)</span>
+              <span>Your complete lottery fantasy breakdown (print or save as PDF)</span>
             </li>
             <li className="flex items-start">
               <span className="text-primary-purple mr-2">✓</span>
-              <a href="https://docs.google.com/spreadsheets/d/1qvNDRAk_8t0Vm0HC7_AfxYS3kaiIJD8AW4iIIKhKk8E/copy?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-primary-purple hover:underline">Dream Life Income Calculator</a> to plan your actual goals
+              <span>Access to the <a href={DREAM_LIFE_CALCULATOR_URL} target="_blank" rel="noopener noreferrer" className="text-primary-purple hover:underline">Dream Life Calculator</a> — figure out what YOUR real dream life costs and the income you need to fund it</span>
             </li>
           </ul>
         </div>

@@ -24,7 +24,7 @@ export default function DreamLifeCost({ annualExpenses }: DreamLifeCostProps) {
   return (
     <div className="bg-gradient-to-br from-primary-purple to-navy rounded-2xl shadow-lg p-8 md:p-12 text-white">
       <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
-        Your Dream Life Actually Costs
+        Your Jackpot Lifestyle Costs
       </h2>
       <p className="text-center text-lg mb-8 opacity-90">
         When you break it down, here's what your choices mean...
