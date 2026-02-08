@@ -1,11 +1,16 @@
 import { formatCurrency } from './calculations'
 
+const DREAM_LIFE_CALCULATOR_URL =
+  process.env.NEXT_PUBLIC_DREAM_LIFE_CALCULATOR_URL ||
+  'https://docs.google.com/spreadsheets/d/1qvNDRAk_8t0Vm0HC7_AfxYS3kaiIJD8AW4iIIKhKk8E/copy?usp=sharing'
+
 interface PDFData {
   jackpot: number
   netTakeHome: number
   state: string
   debts: Array<{ label: string; amount: number }>
   lifestyleItems: Array<{ label: string; amount: number; why: string }>
+  annualExpenses?: Array<{ label: string; amount: number; enabled: boolean }>
   investmentAmount: number
   annualReturn: number
   debtsCleared: number
@@ -19,6 +24,7 @@ export function generatePDFHTML(data: PDFData): string {
     state,
     debts,
     lifestyleItems,
+    annualExpenses,
     investmentAmount,
     annualReturn,
     debtsCleared,
@@ -28,7 +34,11 @@ export function generatePDFHTML(data: PDFData): string {
   const value10Years = investmentAmount * Math.pow(1 + annualReturn / 100, 10)
   const value30Years = investmentAmount * Math.pow(1 + annualReturn / 100, 30)
 
-  const annual = lifestyleDreams
+  // BUG FIX: Use actual annual expenses for the cost breakdown, not one-time fantasy spending
+  const totalAnnualExpenses = annualExpenses
+    ? annualExpenses.filter(e => e.enabled).reduce((sum, e) => sum + e.amount, 0)
+    : 0
+  const annual = totalAnnualExpenses
   const monthly = annual / 12
   const weekly = annual / 52
   const daily = annual / 365
@@ -154,7 +164,7 @@ export function generatePDFHTML(data: PDFData): string {
   </div>
 
   <div class="section">
-    <h2>Your Dreams & Lifestyle</h2>
+    <h2>Your Fantasy Spending</h2>
     ${lifestyleItems.map(item => `
       <div class="item">
         <div style="flex: 1;">
@@ -189,8 +199,9 @@ export function generatePDFHTML(data: PDFData): string {
     <p class="quote">Time does the heavy lifting. You just have to let it.</p>
   </div>
 
+  ${annual > 0 ? `
   <div class="breakdown">
-    <h2 style="color: white; text-align: center; margin-top: 0;">Your Dream Life Actually Costs</h2>
+    <h2 style="color: white; text-align: center; margin-top: 0;">Your Jackpot Lifestyle Costs</h2>
     <div class="breakdown-item">
       <span>Annual</span>
       <span>${formatCurrency(annual)}</span>
@@ -208,15 +219,13 @@ export function generatePDFHTML(data: PDFData): string {
       <span>${formatCurrency(daily)}</span>
     </div>
   </div>
+  ` : ''}
 
   <div style="background: #ECD7D5; padding: 20px; border-radius: 10px; margin: 30px 0;">
-    <h3 style="color: #7A5980; margin-top: 0;">While You're Waiting on Your Windfall...</h3>
-    <p>Let's help you reach your Dream Life, one step at a time.</p>
-    <ul style="color: #3B3B58;">
-      <li><strong>Dream Life Income Calculator:</strong> Plan your real financial goals</li>
-    </ul>
+    <h3 style="color: #7A5980; margin-top: 0;">That was the fantasy. Now here's the reality.</h3>
+    <p>You just spent a billion imaginary dollars. But what does YOUR real dream life actually cost? Find out the income you need to fund it.</p>
     <p style="text-align: center; margin-top: 20px;">
-      <a href="https://docs.google.com/spreadsheets/d/1qvNDRAk_8t0Vm0HC7_AfxYS3kaiIJD8AW4iIIKhKk8E/copy?usp=sharing" style="color: #7A5980; font-weight: 600;">Start Your Journey →</a>
+      <a href="${DREAM_LIFE_CALCULATOR_URL}" style="color: #7A5980; font-weight: 600;">Dream Life Calculator — The Real Numbers →</a>
     </p>
   </div>
 

@@ -54,7 +54,7 @@ export default function SummaryDashboard({
 
   const pieData = [
     { name: 'Debts Cleared', value: debtsCleared, color: COLORS.debts },
-    { name: 'Dreams & Giving', value: lifestyleDreams, color: COLORS.lifestyle },
+    { name: 'Fantasy & Giving', value: lifestyleDreams, color: COLORS.lifestyle },
     { name: 'Invested', value: invested, color: COLORS.invested },
     { name: 'Remaining', value: remaining, color: COLORS.remaining },
   ].filter((item) => item.value > 0)

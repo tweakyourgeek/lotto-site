@@ -150,7 +150,7 @@ export default function MoneyRemaining({
         )}
         {currentStep >= 3 && lifestyleDreams > 0 && (
           <div>
-            <p className="opacity-75">Dreams & Giving</p>
+            <p className="opacity-75">Fantasy & Giving</p>
             <p className="font-semibold">{formatCurrency(lifestyleDreams)}</p>
           </div>
         )}
@@ -164,7 +164,7 @@ export default function MoneyRemaining({
 
       {isOverspent && (
         <p className="text-xs mt-2 opacity-90 italic">
-          You're dreaming bigger than the jackpot! Consider adjusting your allocations.
+          You're spending bigger than the jackpot! Consider adjusting your allocations.
         </p>
       )}
       {isFullyAllocated && !isOverspent && (

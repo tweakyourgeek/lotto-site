@@ -4,8 +4,8 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Your Jackpot Blueprint | Tweak Your Geek',
-  description: 'What would YOU do with a jackpot? Plan your dream life with this interactive lottery calculator.',
-  keywords: 'lottery calculator, jackpot planner, financial planning, dream life planner, lottery taxes, net winnings',
+  description: 'What would YOU do with a billion-dollar jackpot? This fantasy spending tool shows what you value when money is no object.',
+  keywords: 'lottery calculator, jackpot planner, fantasy spending, windfall planner, lottery taxes, net winnings',
 }
 
 export default function RootLayout({

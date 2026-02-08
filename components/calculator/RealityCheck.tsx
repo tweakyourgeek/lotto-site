@@ -15,10 +15,10 @@ export default function RealityCheck({ onGetReport }: RealityCheckProps) {
         {/* CTA Section */}
         <div className="bg-gradient-to-r from-primary-purple/10 to-light-lavender/20 rounded-xl p-6 text-center">
           <p className="text-xl text-navy font-semibold mb-3">
-            While you're waiting on your windfall...
+            That was the fantasy. Now here's the reality.
           </p>
           <p className="text-navy/80 mb-4">
-            Let's help you reach your Dream Life, one step at a time.
+            Find out what YOUR real dream life costs — and the income you actually need to fund it.
           </p>
           <button
             onClick={onGetReport}
