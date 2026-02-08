@@ -1,6 +1,6 @@
 'use client'
 
-import { formatCurrency, calculateIncomeNeeded } from '../lib/calculations'
+import { formatCurrency, calculateIncomeNeeded } from '@/lib/calculations'
 
 interface CostBreakdownProps {
   totalAnnualExpenses: number

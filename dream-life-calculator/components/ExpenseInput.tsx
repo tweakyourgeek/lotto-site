@@ -1,7 +1,7 @@
 'use client'
 
-import { formatCurrency } from '../lib/calculations'
-import type { DreamExpense } from '../lib/constants'
+import { formatCurrency } from '@/lib/calculations'
+import type { DreamExpense } from '@/lib/constants'
 
 interface ExpenseInputProps {
   title: string

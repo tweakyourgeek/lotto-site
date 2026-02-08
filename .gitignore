@@ -29,6 +29,10 @@ yarn-error.log*
 # Vercel
 .vercel
 
+# Dream Life Calculator
+dream-life-calculator/node_modules
+dream-life-calculator/.next
+
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
