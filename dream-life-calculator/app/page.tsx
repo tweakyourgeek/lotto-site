@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import CostBreakdown from '@/components/CostBreakdown'
 import ExpenseInput from '@/components/ExpenseInput'
-import EmailCapture from '@/components/EmailCapture'
 import { DEFAULT_RECURRING_EXPENSES, DEFAULT_ONEOFF_EXPENSES, PRESETS } from '@/lib/constants'
 import { formatCurrency } from '@/lib/calculations'
 import type { DreamExpense } from '@/lib/constants'
@@ -14,7 +13,6 @@ export default function DreamLifeCalculator() {
   const [recurringExpenses, setRecurringExpenses] = useState<DreamExpense[]>(DEFAULT_RECURRING_EXPENSES)
   const [oneOffExpenses, setOneOffExpenses] = useState<DreamExpense[]>(DEFAULT_ONEOFF_EXPENSES)
   const [selectedPreset, setSelectedPreset] = useState<PresetKey>('custom')
-  const [showEmailCapture, setShowEmailCapture] = useState(false)
   const [amortizeYears] = useState(5)
 
   const totalRecurring = recurringExpenses
@@ -41,15 +39,6 @@ export default function DreamLifeCalculator() {
           : { ...exp, enabled: exp.enabled }
       })
     )
-  }
-
-  const handleEmailSubmit = async (email: string) => {
-    // TODO: wire up email API
-    console.log('Email submitted:', email)
-  }
-
-  const handlePrint = () => {
-    window.print()
   }
 
   return (
@@ -133,13 +122,13 @@ export default function DreamLifeCalculator() {
             Now You Know the Number
           </h2>
           <p className="text-navy/80 mb-6 max-w-xl mx-auto">
-            Your dream life costs {formatCurrency(totalAnnual)} per year. Save your plan and start building toward it.
+            Your dream life costs {formatCurrency(totalAnnual)} per year. That&apos;s the target. Now start building toward it.
           </p>
           <button
-            onClick={() => setShowEmailCapture(true)}
+            onClick={() => window.print()}
             className="px-8 py-4 bg-gradient-to-r from-primary-purple to-light-lavender text-white font-semibold rounded-lg hover:shadow-lg transition-all text-lg"
           >
-            Get My Dream Life Plan
+            Print My Plan
           </button>
         </div>
 
@@ -162,12 +151,6 @@ export default function DreamLifeCalculator() {
         </footer>
       </div>
 
-      <EmailCapture
-        isOpen={showEmailCapture}
-        onClose={() => setShowEmailCapture(false)}
-        onSubmit={handleEmailSubmit}
-        onPrint={handlePrint}
-      />
     </main>
   )
 }
